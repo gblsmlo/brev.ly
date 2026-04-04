@@ -1,0 +1,24 @@
+services:
+  tc96_db:
+    image: "bitnami/postgresql:latest"
+    restart: always
+    container_name: tc96_db
+    environment:
+      POSTGRES_USER: docker
+      POSTGRES_PASSWORD: docker
+      POSTGRES_DB: tc96
+    ports:
+      - 5432:5432
+    volumes:
+      - "db_data:/docker-entrypoint-initdb.d"
+    networks:
+      - tc96_net
+
+volumes:
+  db_data:
+    driver: local
+
+networks:
+  tc96_net:
+    driver: bridge
+    name: tc96_net

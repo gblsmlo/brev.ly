@@ -1,0 +1,1 @@
+CREATE DATABASE tc96_test;

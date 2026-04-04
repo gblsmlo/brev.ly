@@ -1,0 +1,6 @@
+{
+	"extends": ["@tc96/biome-config"],
+	"files": {
+		"includes": ["**/src/**/*", "*.ts", "*.js", "*.json", "!package.json"]
+	}
+}

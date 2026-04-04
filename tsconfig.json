@@ -1,0 +1,22 @@
+{
+	"_version": "22.0.0",
+	"$schema": "https://json.schemastore.org/tsconfig",
+
+	"compilerOptions": {
+		"baseUrl": ".",
+		"esModuleInterop": true,
+		"lib": ["es2023"],
+		"module": "ESNext",
+		"moduleResolution": "bundler",
+		"paths": {
+			"@/*": ["src/*"],
+			"@app/*": ["src/app/*"],
+			"@infra/*": ["src/infra/*"],
+			"@shared/*": ["src/shared/*"]
+		},
+		"skipLibCheck": true,
+
+		"strict": true,
+		"target": "ESNext"
+	}
+}
