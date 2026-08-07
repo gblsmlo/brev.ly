@@ -13,7 +13,8 @@ do repository, API e interface.
 - [x] Cada caso possui ID rastreável ao requisito ou à jornada.
 - [x] Níveis de teste e ferramentas estão definidos.
 - [x] Critérios de aceite distinguem teste planejado de teste aprovado.
-- [ ] Implementar os testes junto às respectivas fases de produto.
+- [x] Implementar os testes RED junto à especificação das respectivas fases de produto.
+- [ ] Fazer os testes passarem na etapa GREEN após implementar as funcionalidades.
 
 ## Evidência
 

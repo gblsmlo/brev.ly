@@ -3,8 +3,8 @@
 ## Objetivo
 
 Validar cada requisito obrigatório do encurtador com evidência reproduzível. Este documento é
-um plano de execução: casos marcados como **Planejado** ainda não representam funcionalidades
-implementadas.
+um plano de execução. Nesta etapa, os casos de domínio foram implementados como especificações
+**RED**: falhas são esperadas enquanto a implementação ainda não existe.
 
 ## Níveis de teste
 
@@ -14,7 +14,7 @@ implementadas.
 | Unidade | Bun Test | Casos de uso, repository e serialização CSV |
 | API | Fastify `inject` + Bun Test | Status HTTP, payloads, CORS e integração dos módulos |
 | Integração | PostgreSQL no `compose.test.yml` | Constraints, migrations, índices e concorrência |
-| Navegador | Playwright, a adicionar na Fase 3 | Jornadas da SPA, redirecionamento e download |
+| Navegador | Playwright | Jornadas da SPA, redirecionamento e download |
 | Performance | PostgreSQL `EXPLAIN ANALYZE` | Paginação e ausência de scan/offset regressivo |
 
 ## Dados de teste
@@ -84,9 +84,14 @@ usa PostgreSQL em `127.0.0.1:5433`; não usar o banco de desenvolvimento.
 5. `bun run lint`, `bun run typecheck`, `bun run test`, build e testes de integração passam.
 6. Cada item da matriz em [requirements.md](requirements.md) aponta para um teste ou evidência.
 
-## Estado atual
+## Execução RED — 2026-08-07
 
-Os casos de domínio ainda não foram executados porque API, repository, CSV/CDN e telas não foram
-implementados. Os testes atuais cobrem setup, schemas de ambiente, contratos Zod e rotas de
-fundação.
+As células da matriz continuam como **Planejado** até a etapa GREEN; a existência da
+especificação RED não significa que a funcionalidade foi aceita.
 
+- Back-end: 37 testes executados; 36 falharam e 1 passou (preflight CORS). As falhas confirmam
+  as lacunas esperadas em rotas, schema Drizzle, repository e exportador CSV/CDN.
+- Front-end: 14 especificações Playwright implementadas e descobertas pelo runner (`--list`). A
+  execução no navegador fica pendente da implementação da SPA e da instalação do browser Chromium.
+- `bun run lint` e `bun run typecheck` passam. Nenhum caso RED deve ser interpretado como requisito
+  concluído.

@@ -73,6 +73,15 @@
 - Definidos testes unitários, API, integração PostgreSQL, CDN, performance e navegador.
 - Nenhum requisito de domínio foi marcado como aprovado antes da implementação.
 
+### 2026-08-07 — Etapa RED
+
+- Implementadas 22 especificações de API/persistência/exportação do back-end e 14 jornadas
+  Playwright do front-end.
+- Execução direcionada do back-end: 37 testes, 36 falhas esperadas e 1 aprovação (CORS preflight).
+- O runner Playwright lista as 14 jornadas; a execução GREEN aguarda a SPA e a instalação do
+  Chromium no ambiente.
+- Próxima ação: implementar schema Drizzle, repository e rotas mantendo os testes como contrato.
+
 ### 2026-08-07
 
 - Criada a fundação específica do desafio a partir de um workspace vazio.
