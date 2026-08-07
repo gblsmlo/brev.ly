@@ -53,6 +53,26 @@
 - Dockerfile construído e imagem validada por uma requisição real ao endpoint `/health`.
 - Próxima ação: modelar a tabela `links` e integrar os schemas às rotas Fastify.
 
+### 2026-08-07 — Setup de testes
+
+- Centralizado o runner no `bun test` da raiz com preload global e isolamento por arquivo.
+- Adicionados comandos de watch, cobertura e filtros para web, server e integração.
+- Criado PostgreSQL efêmero e isolado para os próximos testes de repository.
+- Documentadas convenções de nomes, responsabilidades e ciclo do banco de testes.
+
+### 2026-08-07 — Schemas de ambiente
+
+- Separados schemas Zod para server, web e testes.
+- Tipos `ServerEnv`, `WebEnv` e `TestEnv` derivados com `z.infer`.
+- Produção agora exige configuração completa do Cloudflare R2.
+- O bootstrap da SPA valida as URLs Vite ao carregar.
+
+### 2026-08-07 — Plano de testes funcional
+
+- Criada matriz de testes BE-T01–BE-T22 e FE-T01–FE-T14.
+- Definidos testes unitários, API, integração PostgreSQL, CDN, performance e navegador.
+- Nenhum requisito de domínio foi marcado como aprovado antes da implementação.
+
 ### 2026-08-07
 
 - Criada a fundação específica do desafio a partir de um workspace vazio.

@@ -1,0 +1,11 @@
+[test]
+preload = ["./test/setup.ts"]
+timeout = 5000
+coverageSkipTestFiles = true
+coverageReporter = ["text", "lcov"]
+coverageDir = "./coverage"
+coveragePathIgnorePatterns = [
+  "**/*.config.ts",
+  "**/vite-env.d.ts",
+  "**/dist/**",
+]

@@ -66,6 +66,11 @@ arquivos `.env` reais não devem ser versionados.
 | `bun run lint` | Verifica lint e formatação |
 | `bun run typecheck` | Verifica os tipos de todos os workspaces |
 | `bun run test` | Executa os testes |
+| `bun run test:watch` | Executa novamente os testes afetados por alterações |
+| `bun run test:coverage` | Gera cobertura em texto e LCOV |
+| `bun run test:server` | Executa somente os testes do back-end |
+| `bun run test:web` | Executa somente os testes do front-end |
+| `bun run test:integration` | Executa testes `*.integration.test.ts` com `.env.test` |
 | `bun run build` | Gera os artefatos de produção |
 
 ## Contratos principais
@@ -78,6 +83,15 @@ arquivos `.env` reais não devem ser versionados.
 Consulte [docs/api-contract.md](docs/api-contract.md) e a
 [decisão de identificadores](docs/decisions/001-link-identifiers.md) antes de implementar os
 endpoints.
+
+A configuração, convenções e ambiente de testes estão em
+[docs/testing.md](docs/testing.md).
+
+Os contratos de configuração separados estão em
+[docs/environment.md](docs/environment.md).
+
+O plano de verificação funcional está em [docs/test-plan.md](docs/test-plan.md). Casos ainda
+não implementados permanecem explicitamente como planejados.
 
 ## Escopo de correção
 

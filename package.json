@@ -16,12 +16,21 @@
     "dev:web": "bun run --cwd web dev",
     "lint": "biome check .",
     "lint:fix": "biome check --write .",
-    "test": "bun run --parallel --workspaces test",
-    "typecheck": "bun run --parallel --workspaces typecheck"
+    "test": "bun test --isolate",
+    "test:coverage": "bun test --isolate --coverage",
+    "test:db:down": "docker compose -f compose.test.yml down",
+    "test:db:migrate": "bun --env-file=../.env.test run --cwd server db:migrate",
+    "test:db:up": "docker compose -f compose.test.yml up --detach --wait",
+    "test:integration": "bun --env-file=.env.test test --isolate --pass-with-no-tests integration",
+    "test:server": "bun test --isolate server",
+    "test:watch": "bun test --isolate --watch",
+    "test:web": "bun test --isolate web",
+    "typecheck": "tsc -b"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.0",
     "@types/bun": "1.3.14",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "zod": "4.4.3"
   }
 }

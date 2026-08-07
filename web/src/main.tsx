@@ -2,8 +2,11 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
+import { webEnv } from './env'
 import { routePaths } from './route-paths'
 import './styles.css'
+
+document.documentElement.dataset.backendUrl = webEnv.VITE_BACKEND_URL
 
 function HomePage() {
   return (
