@@ -16,7 +16,7 @@ Entregar uma base mínima, executável e rastreável que respeite a estrutura ex
 - [x] Requisitos, API, arquitetura, decisão e progresso documentados.
 - [x] Instalação reproduzível com lockfile.
 - [x] Lint, typecheck, testes e builds aprovados.
-- [x] Dockerfile multi-stage revisado; build executável registrado para a Fase 5.
+- [x] Dockerfile multi-stage construído e validado com a execução do contêiner.
 - [x] Primeiro commit preparado e criado como entrega desta tarefa.
 
 ## Evidências
@@ -26,8 +26,8 @@ Entregar uma base mínima, executável e rastreável que respeite a estrutura ex
 - `bun run typecheck`
 - `bun run test` — 2 testes aprovados
 - `bun run build` — web e server aprovados
-- `docker build -f server/Dockerfile -t brevly-server:bootstrap .` — não executado porque
-  o daemon Docker/OrbStack estava indisponível
+- `docker build -f server/Dockerfile -t brevly-server:contracts .`
+- `GET http://127.0.0.1:33330/health` no contêiner — `200 {"status":"ok"}`
 
 ## Fora de escopo
 

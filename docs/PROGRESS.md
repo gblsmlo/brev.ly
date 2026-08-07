@@ -2,14 +2,14 @@
 
 ## Estado atual
 
-**Fase 1 — Concluída**
+**Fase 2 — Em andamento**
 
 ## Fases
 
 | Fase | Estado |
 | --- | --- |
 | 1. Fundação e contratos | Concluída |
-| 2. Persistência e API | Não iniciada |
+| 2. Persistência e API | Em andamento |
 | 3. Interface SPA | Não iniciada |
 | 4. CSV e CDN | Não iniciada |
 | 5. Aceitação e entrega | Não iniciada |
@@ -34,12 +34,24 @@
 - Usar paginação por cursor para a listagem.
 - Manter funcionalidades extras fora da branch principal até a correção.
 
-### Validação adiada
+### Validação Docker concluída
 
-- O build da imagem não pôde ser executado porque o daemon Docker/OrbStack estava desligado.
-  A validação executável permanece no checklist de aceitação da Fase 5.
+- Imagem `brevly-server:contracts` construída com o Dockerfile multi-stage.
+- Contêiner executado como usuário não privilegiado e `/health` respondeu `{"status":"ok"}`.
+- Corrigida a ordem de `--cwd` nos scripts Bun após o primeiro build Docker revelar que o
+  artefato `dist` não estava sendo gerado.
 
 ## Registro de sessões
+
+### 2026-08-07 — Contratos da API
+
+- Criados schemas Zod para links, criação, parâmetros, paginação, incremento, exportação e
+  erros.
+- Tipos públicos derivados dos schemas com `z.infer`, sem duplicação manual.
+- Contratos fechados para rejeitar campos desconhecidos.
+- Adicionados 13 testes de contrato para formatos válidos, erros e limites.
+- Dockerfile construído e imagem validada por uma requisição real ao endpoint `/health`.
+- Próxima ação: modelar a tabela `links` e integrar os schemas às rotas Fastify.
 
 ### 2026-08-07
 

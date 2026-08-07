@@ -2,6 +2,19 @@
 
 Base URL local: `http://localhost:3333`.
 
+Os schemas Zod em `server/src/contracts` são a fonte de verdade executável deste contrato. Os
+tipos TypeScript são derivados com `z.infer`; não devem ser mantidas interfaces manuais
+paralelas aos schemas.
+
+```ts
+export const createLinkBodySchema = z.object({
+  originalUrl: httpUrlSchema,
+  shortCode: shortCodeSchema,
+})
+
+export type CreateLinkBody = z.infer<typeof createLinkBodySchema>
+```
+
 ## Formato do encurtamento
 
 `shortCode` deve corresponder a `^[A-Za-z0-9_-]{3,30}$`. A URL original deve usar `http` ou
@@ -62,3 +75,6 @@ O CSV conterá `original_url`, `short_url`, `access_count` e `created_at`.
 }
 ```
 
+Os códigos públicos aceitos são `VALIDATION_ERROR`, `SHORT_CODE_ALREADY_EXISTS`,
+`LINK_NOT_FOUND`, `EXPORT_FAILED` e `INTERNAL_ERROR`. Detalhes internos não fazem parte da
+resposta pública.

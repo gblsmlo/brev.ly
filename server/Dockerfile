@@ -12,7 +12,7 @@ FROM dependencies AS build
 
 COPY server server
 
-RUN bun --cwd server run build
+RUN bun run --cwd server build
 
 FROM oven/bun:1.3.14 AS runtime
 
@@ -25,4 +25,3 @@ USER bun
 EXPOSE 3333
 
 CMD ["bun", "dist/server.js"]
-

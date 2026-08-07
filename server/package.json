@@ -11,6 +11,9 @@
     "test": "bun test",
     "typecheck": "tsc --noEmit -p tsconfig.json"
   },
+  "exports": {
+    "./contracts": "./src/contracts/index.ts"
+  },
   "dependencies": {
     "@fastify/cors": "11.1.0",
     "drizzle-orm": "0.44.7",
