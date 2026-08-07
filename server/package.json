@@ -1,0 +1,25 @@
+{
+  "name": "@brev-ly/server",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "bun build src/server.ts --outdir dist --target bun",
+    "db:generate": "bun --env-file=.env drizzle-kit generate --config drizzle.config.ts",
+    "db:migrate": "bun --env-file=.env drizzle-kit migrate --config drizzle.config.ts",
+    "dev": "bun --env-file=.env --watch src/server.ts",
+    "start": "bun dist/server.js",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@fastify/cors": "11.1.0",
+    "drizzle-orm": "0.44.7",
+    "fastify": "5.6.2",
+    "pg": "8.16.3",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@types/pg": "8.16.0",
+    "drizzle-kit": "0.31.10"
+  }
+}
