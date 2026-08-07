@@ -30,7 +30,7 @@ async function request(
   headers?: Record<string, string>,
 ): Promise<TestResponse> {
   const app = await buildApp({ corsOrigin: 'http://localhost:5173' })
-  const inject = app.inject as unknown as (options: {
+  const inject = app.inject.bind(app) as unknown as (options: {
     headers?: Record<string, string>
     method: 'DELETE' | 'GET' | 'OPTIONS' | 'PATCH' | 'POST'
     payload?: unknown

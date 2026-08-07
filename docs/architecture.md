@@ -1,45 +1,24 @@
-# Arquitetura inicial
+# Arquitetura do server
+
+O back-end usa um composition root HTTP para manter o Fastify desacoplado da persistência:
 
 ```text
-Navegador
-   │
-   ▼
-React SPA (web)
-   │ HTTP/JSON
-   ▼
-Fastify API (server) ───────────► Cloudflare R2 ─► CDN pública
-   │                                  CSV
-   ▼
-PostgreSQL
+server.ts
+  └─ http/app.ts (CORS, plugins e dependências)
+       └─ routes/index.ts
+            └─ routes/health.ts
+       └─ repositories/ports.ts (contratos de persistência)
 ```
 
-## Limites
+## Responsabilidades
 
-- `web` contém somente interface, estado remoto e navegação da SPA.
-- `server` contém validação, regras, persistência, exportação e integração com armazenamento.
-- O PostgreSQL é a fonte de verdade dos links e contadores.
-- O R2 armazena somente relatórios gerados; a API devolve sua URL pública.
+- `server/src/server.ts`: carrega ambiente e inicia o listener.
+- `server/src/http/app.ts`: cria a instância Fastify, registra CORS, expõe dependências e compõe
+  as rotas.
+- `server/src/routes/index.ts`: ponto único de registro das rotas HTTP.
+- `server/src/routes/health.ts`: liveness check `GET /health`, retornando `{ "status": "ok" }`.
+- `server/src/repositories/ports.ts`: portas que a camada HTTP consumirá; a implementação
+  Drizzle/Postgres entra por injeção em `buildApp({ repositories })`.
 
-## Modelo inicial
-
-Tabela `links` planejada:
-
-| Campo | Tipo | Regra |
-| --- | --- | --- |
-| `id` | UUID | Chave primária interna |
-| `original_url` | text | URL HTTP(S) válida |
-| `short_code` | varchar(30) | Único e indexado |
-| `access_count` | integer | Não negativo; padrão zero |
-| `created_at` | timestamptz | Preenchido pelo banco |
-
-Além do índice único em `short_code`, a listagem terá índice em `(created_at DESC, id DESC)`
-para suportar paginação por cursor.
-
-## Qualidade
-
-- Regras e rotas devem começar por testes de falha e sucesso.
-- O incremento deve ser uma operação SQL atômica.
-- Erros de domínio devem ser traduzidos para respostas HTTP consistentes.
-- A aceitação final inclui build, migrations em PostgreSQL real, testes da API e jornada no
-  navegador em larguras mobile e desktop.
-
+As rotas não devem importar o driver `pg` ou o schema Drizzle diretamente. A próxima etapa pode
+implementar `createLinksRepository` atrás de `LinksRepository` sem alterar o bootstrap HTTP.

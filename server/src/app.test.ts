@@ -13,4 +13,22 @@ describe('GET /health', () => {
 
     await app.close()
   })
+
+  test('registers repository dependencies at the HTTP composition boundary', async () => {
+    const linksRepository = {
+      create: async () => ({}),
+      deleteByShortCode: async () => true,
+      findByShortCode: async () => null,
+      incrementAccesses: async () => ({ accessCount: 1 }),
+      list: async () => ({ items: [], nextCursor: null }),
+    }
+    const app = await buildApp({
+      corsOrigin: 'http://localhost:5173',
+      repositories: { links: linksRepository },
+    })
+
+    expect(app.repositories.links).toBe(linksRepository)
+
+    await app.close()
+  })
 })

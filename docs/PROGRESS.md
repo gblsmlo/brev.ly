@@ -82,6 +82,14 @@
   Chromium no ambiente.
 - Próxima ação: implementar schema Drizzle, repository e rotas mantendo os testes como contrato.
 
+### 2026-08-07 — Bootstrap Fastify
+
+- Extraída a composição HTTP para `server/src/http/app.ts`.
+- Centralizado o registro de rotas em `server/src/routes/index.ts`.
+- Criada a primeira rota de liveness `GET /health`.
+- Definidas as portas `LinksRepository` e `AppRepositories`, injetáveis no composition root.
+- Próxima ação: implementar o adapter Drizzle/Postgres de `LinksRepository`.
+
 ### 2026-08-07
 
 - Criada a fundação específica do desafio a partir de um workspace vazio.

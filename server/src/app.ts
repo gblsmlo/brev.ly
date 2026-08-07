@@ -1,18 +1,11 @@
-import cors from '@fastify/cors'
-import Fastify from 'fastify'
+export {
+  type BuildAppOptions,
+  buildHttpApp,
+} from './http/app'
 
-interface BuildAppOptions {
-  corsOrigin: string
-}
+import type { BuildAppOptions } from './http/app'
+import { buildHttpApp } from './http/app'
 
-export async function buildApp({ corsOrigin }: BuildAppOptions) {
-  const app = Fastify({ logger: true })
-
-  await app.register(cors, {
-    origin: corsOrigin,
-  })
-
-  app.get('/health', async () => ({ status: 'ok' }))
-
-  return app
+export function buildApp(options: BuildAppOptions) {
+  return buildHttpApp(options)
 }
