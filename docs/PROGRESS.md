@@ -90,6 +90,15 @@
 - Definidas as portas `LinksRepository` e `AppRepositories`, injetáveis no composition root.
 - Próxima ação: implementar o adapter Drizzle/Postgres de `LinksRepository`.
 
+### 2026-08-07 — Handlers e use cases
+
+- Adotado `handler` como nome do adaptador HTTP; decisão registrada no ADR 002 e no `AGENTS.md`.
+- Implementado o fluxo `route -> handler -> use-case` para health e criação inicial de links.
+- A criação valida o contrato Zod e traduz duplicidade para HTTP `409`.
+- A porta `LinksRepository` agora usa tipos inferidos dos schemas Zod.
+- Testes unitários e HTTP cobrem handlers, use cases e a composição com repository injetado.
+- Próxima ação: implementar e testar o adapter Drizzle/Postgres por trás da porta existente.
+
 ### 2026-08-07
 
 - Criada a fundação específica do desafio a partir de um workspace vazio.

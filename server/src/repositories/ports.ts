@@ -1,19 +1,24 @@
+import type {
+  CreateLinkBody,
+  IncrementLinkAccessResponse,
+  Link,
+  ListLinksQuery,
+  ListLinksResponse,
+} from '../contracts'
+
 /**
- * Porta de persistência consumida pela camada HTTP.
+ * Porta de persistência consumida pelos use cases.
  *
  * A implementação Drizzle/Postgres será adicionada na próxima etapa. Manter
  * esta interface fora das rotas permite testar os casos de uso sem acoplar o
  * Fastify ao driver de banco.
  */
 export interface LinksRepository {
-  create(input: { originalUrl: string; shortCode: string }): Promise<unknown>
+  create(input: CreateLinkBody): Promise<Link>
   deleteByShortCode(shortCode: string): Promise<boolean>
-  findByShortCode(shortCode: string): Promise<unknown | null>
-  incrementAccesses(shortCode: string): Promise<{ accessCount: number }>
-  list(input: {
-    cursor?: string
-    limit: number
-  }): Promise<{ items: unknown[]; nextCursor: string | null }>
+  findByShortCode(shortCode: string): Promise<Link | null>
+  incrementAccesses(shortCode: string): Promise<IncrementLinkAccessResponse>
+  list(input: ListLinksQuery): Promise<ListLinksResponse>
 }
 
 export interface AppRepositories {
