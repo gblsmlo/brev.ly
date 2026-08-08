@@ -2,6 +2,7 @@ import { describe, expect, mock, test } from 'bun:test'
 import Fastify from 'fastify'
 
 import type { Link } from '../../contracts'
+import { failure, success } from '../../shared/result'
 import { ShortCodeAlreadyExistsError } from '../../use-cases/errors'
 import { makeCreateLinkHandler } from './create-link-handler'
 
@@ -23,7 +24,7 @@ async function buildHandlerApp(createLink: ReturnType<typeof mock>) {
 
 describe('createLinkHandler', () => {
   test('returns 201 with the created link', async () => {
-    const createLink = mock(async () => link)
+    const createLink = mock(async () => success(link))
     const app = await buildHandlerApp(createLink)
 
     const response = await app.inject({
@@ -39,7 +40,7 @@ describe('createLinkHandler', () => {
   })
 
   test('returns 400 without invoking the use case for invalid input', async () => {
-    const createLink = mock(async () => link)
+    const createLink = mock(async () => success(link))
     const app = await buildHandlerApp(createLink)
 
     const response = await app.inject({
@@ -55,9 +56,7 @@ describe('createLinkHandler', () => {
   })
 
   test('maps an existing short code to 409', async () => {
-    const createLink = mock(async () => {
-      throw new ShortCodeAlreadyExistsError()
-    })
+    const createLink = mock(async () => failure(new ShortCodeAlreadyExistsError()))
     const app = await buildHandlerApp(createLink)
 
     const response = await app.inject({

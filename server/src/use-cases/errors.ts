@@ -18,3 +18,10 @@ export class InvalidLinksCursorError extends Error {
     this.name = 'InvalidLinksCursorError'
   }
 }
+
+export class ExportLinksError extends Error {
+  constructor(cause?: unknown) {
+    super('Não foi possível exportar os links.', { cause })
+    this.name = 'ExportLinksError'
+  }
+}

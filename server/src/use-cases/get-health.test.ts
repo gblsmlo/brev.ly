@@ -4,7 +4,7 @@ import { getHealth, healthStatus } from './get-health'
 
 describe('getHealth use case', () => {
   test('reports the application liveness state', () => {
-    expect(getHealth()).toEqual({ status: 'ok' })
-    expect(getHealth()).toBe(healthStatus)
+    expect(getHealth()).toEqual({ success: true, value: { status: 'ok' } })
+    expect(getHealth().value).toBe(healthStatus)
   })
 })

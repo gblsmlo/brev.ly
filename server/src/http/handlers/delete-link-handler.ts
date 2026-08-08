@@ -2,7 +2,6 @@ import type { FastifyReply, FastifyRequest } from 'fastify'
 
 import { type ApiError, shortCodeParamsSchema } from '../../contracts'
 import type { DeleteLinkUseCase } from '../../use-cases/delete-link'
-import { LinkNotFoundError } from '../../use-cases/errors'
 
 export function makeDeleteLinkHandler(deleteLink: DeleteLinkUseCase) {
   return async (request: FastifyRequest, reply: FastifyReply) => {
@@ -15,18 +14,15 @@ export function makeDeleteLinkHandler(deleteLink: DeleteLinkUseCase) {
       } satisfies ApiError)
     }
 
-    try {
-      await deleteLink(params.data.shortCode)
-      return reply.status(204).send()
-    } catch (error) {
-      if (error instanceof LinkNotFoundError) {
-        return reply.status(404).send({
-          code: 'LINK_NOT_FOUND',
-          message: error.message,
-        } satisfies ApiError)
-      }
+    const result = await deleteLink(params.data.shortCode)
 
-      throw error
+    if (!result.success) {
+      return reply.status(404).send({
+        code: 'LINK_NOT_FOUND',
+        message: result.error.message,
+      } satisfies ApiError)
     }
+
+    return reply.status(204).send()
   }
 }

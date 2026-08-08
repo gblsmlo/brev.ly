@@ -2,16 +2,25 @@ import cors from '@fastify/cors'
 import Fastify, { type FastifyInstance } from 'fastify'
 import type { RepositoryDependencies } from '../repositories'
 import { registerRoutes } from '../routes'
+import type { ReportsStorage } from '../services/reports-storage'
+
+export interface AppServices {
+  reportsStorage: ReportsStorage
+}
+
+export type ServiceDependencies = Partial<AppServices>
 
 declare module 'fastify' {
   interface FastifyInstance {
     repositories: RepositoryDependencies
+    services: ServiceDependencies
   }
 }
 
 export interface BuildAppOptions {
   corsOrigin: string
   repositories?: RepositoryDependencies
+  services?: ServiceDependencies
 }
 
 /**
@@ -23,10 +32,12 @@ export interface BuildAppOptions {
 export async function buildHttpApp({
   corsOrigin,
   repositories = {},
+  services = {},
 }: BuildAppOptions): Promise<FastifyInstance> {
   const app = Fastify({ logger: true })
 
   app.decorate('repositories', repositories)
+  app.decorate('services', services)
 
   await app.register(cors, {
     origin: corsOrigin,

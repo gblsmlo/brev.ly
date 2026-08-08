@@ -10,9 +10,9 @@ Este repositório contém os três escopos avaliados pelo desafio: front-end, ba
 | Fase | Situação | Evidência |
 | --- | --- | --- |
 | 1. Fundação e contratos | Concluída | Estrutura, specs, testes e builds locais |
-| 2. Persistência e API | Em andamento | Schema, migrations, repository e criação inicial |
+| 2. Persistência e API | Em andamento | CRUD completo; evidência de performance pendente |
 | 3. Interface SPA | Não iniciada | — |
-| 4. CSV e CDN | Não iniciada | — |
+| 4. CSV e CDN | Em andamento | CSV, rota e adapter R2 implementados; validação real pendente |
 | 5. Aceitação e entrega | Não iniciada | — |
 
 O acompanhamento detalhado está em [docs/PROGRESS.md](docs/PROGRESS.md). A rastreabilidade
@@ -84,7 +84,8 @@ arquivos `.env` reais não devem ser versionados.
 - A URL curta usa o formato `https://<frontend>/<shortCode>`.
 - `shortCode` é o identificador público usado para resolver, excluir e incrementar acessos.
 - A listagem será paginada por cursor e ordenada por criação, evitando carregar toda a tabela.
-- A exportação gera `reports/<uuid>.csv` e devolve uma URL pública da CDN.
+- `POST /links/export` gera `reports/<uuid>.csv`, envia ao Cloudflare R2 e devolve a URL
+  pública configurada em `CLOUDFLARE_PUBLIC_URL`.
 
 Consulte [docs/api-contract.md](docs/api-contract.md) e a
 [decisão de identificadores](docs/decisions/001-link-identifiers.md) antes de implementar os

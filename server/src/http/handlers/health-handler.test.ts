@@ -1,11 +1,12 @@
 import { describe, expect, mock, test } from 'bun:test'
 import Fastify from 'fastify'
 
+import { success } from '../../shared/result'
 import { makeHealthHandler } from './health-handler'
 
 describe('healthHandler', () => {
   test('maps the health use case result to an HTTP response', async () => {
-    const getHealth = mock(() => ({ status: 'ok' }) as const)
+    const getHealth = mock(() => success({ status: 'ok' } as const))
     const app = Fastify({ logger: false })
     app.get('/health', makeHealthHandler(getHealth))
 

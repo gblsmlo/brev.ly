@@ -47,12 +47,12 @@ usa PostgreSQL em `127.0.0.1:5433`; não usar o banco de desenvolvimento.
 | BE-T12 | Incrementar acessos de um link | API/Integração | Operação atômica e contador incrementado em `1` | Aprovado |
 | BE-T13 | Incrementar acessos concorrentemente | Integração | N requisições resultam em exatamente N incrementos | Aprovado |
 | BE-T14 | Incrementar código inexistente | API | `404` com `LINK_NOT_FOUND` | Aprovado |
-| BE-T15 | Exportar coleção em CSV | Unidade/API | `201`, content-type/colunas corretos e dados completos | Planejado |
-| BE-T16 | Exportar coleção vazia | Unidade/API | CSV válido com cabeçalho e zero linhas de dados | Planejado |
-| BE-T17 | Gerar dois relatórios | Unidade/Integração | Nomes diferentes, aleatórios e sem colisão | Planejado |
-| BE-T18 | Publicar relatório no armazenamento CDN | Integração | URL pública retornada e objeto acessível | Planejado |
-| BE-T19 | Falha do armazenamento durante exportação | Unidade/API | Erro controlado `EXPORT_FAILED`; sem URL falsa | Planejado |
-| BE-T20 | Confirmar colunas do CSV | Unidade | `original_url`, `short_url`, `access_count`, `created_at` | Planejado |
+| BE-T15 | Exportar coleção em CSV | Unidade/API | `201`, content-type/colunas corretos e dados completos | Aprovado |
+| BE-T16 | Exportar coleção vazia | Unidade/API | CSV válido com cabeçalho e zero linhas de dados | Aprovado |
+| BE-T17 | Gerar dois relatórios | Unidade/Integração | Nomes diferentes, aleatórios e sem colisão | Aprovado |
+| BE-T18 | Publicar relatório no armazenamento CDN | Integração | URL pública retornada e objeto acessível | Adapter aprovado; R2 real pendente |
+| BE-T19 | Falha do armazenamento durante exportação | Unidade/API | Erro controlado `EXPORT_FAILED`; sem URL falsa | Aprovado |
+| BE-T20 | Confirmar colunas do CSV | Unidade | `original_url`, `short_url`, `access_count`, `created_at` | Aprovado |
 | BE-T21 | Verificar paginação em tabela grande | Performance | Plano usa índice `(created_at, id)` e não depende de `OFFSET` | Planejado |
 | BE-T22 | Validar CORS preflight | API | Origem configurada recebe headers CORS; origem indevida é rejeitada | Aprovado |
 
@@ -100,5 +100,5 @@ especificação RED não significa que a funcionalidade foi aceita.
 
 - BE-T01–BE-T14 e BE-T22 passaram nos testes HTTP com repository injetado.
 - Sete testes PostgreSQL validaram constraint única, cursor, exclusão e incremento concorrente.
-- BE-T15–BE-T20 permanecem RED até a implementação de CSV/CDN.
+- BE-T15–BE-T17 e BE-T19–BE-T20 estão GREEN; BE-T18 aguarda validação com um bucket R2 real.
 - BE-T21 mantém pendente a evidência com `EXPLAIN ANALYZE` em tabela grande.

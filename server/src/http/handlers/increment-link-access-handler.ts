@@ -1,7 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify'
 
 import { type ApiError, shortCodeParamsSchema } from '../../contracts'
-import { LinkNotFoundError } from '../../use-cases/errors'
 import type { IncrementLinkAccessUseCase } from '../../use-cases/increment-link-access'
 
 export function makeIncrementLinkAccessHandler(incrementLinkAccess: IncrementLinkAccessUseCase) {
@@ -15,17 +14,15 @@ export function makeIncrementLinkAccessHandler(incrementLinkAccess: IncrementLin
       } satisfies ApiError)
     }
 
-    try {
-      return reply.status(200).send(await incrementLinkAccess(params.data.shortCode))
-    } catch (error) {
-      if (error instanceof LinkNotFoundError) {
-        return reply.status(404).send({
-          code: 'LINK_NOT_FOUND',
-          message: error.message,
-        } satisfies ApiError)
-      }
+    const result = await incrementLinkAccess(params.data.shortCode)
 
-      throw error
+    if (!result.success) {
+      return reply.status(404).send({
+        code: 'LINK_NOT_FOUND',
+        message: result.error.message,
+      } satisfies ApiError)
     }
+
+    return reply.status(200).send(result.value)
   }
 }

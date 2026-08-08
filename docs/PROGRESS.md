@@ -2,7 +2,7 @@
 
 ## Estado atual
 
-**Fase 2 — Em andamento**
+**Fases 2 e 4 — Em andamento**
 
 ## Fases
 
@@ -11,7 +11,7 @@
 | 1. Fundação e contratos | Concluída |
 | 2. Persistência e API | Em andamento |
 | 3. Interface SPA | Não iniciada |
-| 4. CSV e CDN | Não iniciada |
+| 4. CSV e CDN | Em andamento |
 | 5. Aceitação e entrega | Não iniciada |
 
 ## Fase 1
@@ -119,6 +119,24 @@
 - Todas as entradas HTTP usam os contratos Zod e erros conhecidos retornam `400`, `404` ou `409`.
 - A listagem expõe cursor opaco, limite validado e header `x-pagination-strategy: cursor`.
 - BE-T01–BE-T14 e BE-T22 passaram; CSV/CDN e evidência `EXPLAIN ANALYZE` seguem pendentes.
+
+### 2026-08-07 — Exportação CSV e Cloudflare R2
+
+- Implementado `POST /links/export` no fluxo `route -> handler -> use-case -> service`.
+- O exportador percorre todas as páginas do repository em lotes de 100 registros.
+- O CSV aplica escaping e contém `original_url`, `short_url`, `access_count` e `created_at`.
+- Cada objeto recebe o caminho `reports/<uuid>.csv` e é enviado por uma porta de storage.
+- Criado adapter S3-compatible para Cloudflare R2 com URL pública da CDN.
+- Testes unitários e HTTP validam conteúdo, upload, URL pública e nomes únicos sem chamadas de rede.
+- Próxima ação: validar o adapter com credenciais R2 reais e registrar `EXPLAIN ANALYZE` da listagem.
+
+### 2026-08-07 — Result Pattern
+
+- Criado `Result<T, E>` como união discriminada com helpers `success` e `failure`.
+- Todos os casos de uso passaram a explicitar sucessos e falhas previstas no tipo de retorno.
+- Handlers agora traduzem resultados em respostas HTTP sem exceções como controle de fluxo.
+- Falhas inesperadas continuam chegando ao error boundary do Fastify.
+- Decisão e regras de adoção registradas no ADR 003 e no `AGENTS.md`.
 
 ### 2026-08-07
 

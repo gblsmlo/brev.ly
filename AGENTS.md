@@ -30,6 +30,15 @@ route -> handler -> use-case -> repository
 - Recebem dados já validados e dependências por injeção.
 - Coordenam repositories e serviços, sem conhecer Fastify.
 - Não definem status HTTP, headers ou detalhes do banco de dados.
+- Retornam `Result<T, E>` para sucessos e falhas previstas; exceções ficam reservadas para falhas
+  inesperadas.
+
+### Result (`server/src/shared/result.ts`)
+
+- `success(value)` representa a saída válida do caso de uso.
+- `failure(error)` representa uma falha conhecida que o handler deve traduzir.
+- O discriminante `success` deve ser verificado antes de acessar `value` ou `error`.
+- Não transforme indiscriminadamente todo erro inesperado em `failure`.
 
 ### Repositories (`server/src/repositories`)
 
@@ -37,6 +46,13 @@ route -> handler -> use-case -> repository
 - Implementações traduzem essas portas para Drizzle/Postgres.
 - Não conhecem Fastify e não retornam respostas HTTP.
 - Devem preservar operações atômicas e paginação por cursor quando exigidas pelo domínio.
+
+### Services (`server/src/services`)
+
+- Definem portas e adapters para integrações que não são persistência relacional.
+- Regras reutilizáveis, como serialização CSV, permanecem independentes do Fastify.
+- Integrações externas, como Cloudflare R2, entram por injeção e não são importadas pelos handlers.
+- Testes devem substituir serviços externos por implementações em memória, sem realizar chamadas de rede.
 
 ### Contratos (`server/src/contracts`)
 

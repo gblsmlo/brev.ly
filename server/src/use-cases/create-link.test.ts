@@ -3,7 +3,6 @@ import { describe, expect, mock, test } from 'bun:test'
 import type { Link } from '../contracts'
 import { DuplicateShortCodeRepositoryError, type LinksRepository } from '../repositories'
 import { makeCreateLinkUseCase } from './create-link'
-import { ShortCodeAlreadyExistsError } from './errors'
 
 const link: Link = {
   accessCount: 0,
@@ -35,7 +34,7 @@ describe('createLink use case', () => {
       shortCode: link.shortCode,
     })
 
-    expect(result).toEqual(link)
+    expect(result).toEqual({ success: true, value: link })
     expect(repository.findByShortCode).toHaveBeenCalledWith(link.shortCode)
     expect(repository.create).toHaveBeenCalledTimes(1)
   })
@@ -44,9 +43,12 @@ describe('createLink use case', () => {
     const repository = makeRepository({ findByShortCode: mock(async () => link) })
     const createLink = makeCreateLinkUseCase(repository)
 
-    expect(
-      createLink({ originalUrl: link.originalUrl, shortCode: link.shortCode }),
-    ).rejects.toBeInstanceOf(ShortCodeAlreadyExistsError)
+    const result = await createLink({ originalUrl: link.originalUrl, shortCode: link.shortCode })
+
+    expect(result.success).toBeFalse()
+    if (!result.success) {
+      expect(result.error.name).toBe('ShortCodeAlreadyExistsError')
+    }
     expect(repository.create).not.toHaveBeenCalled()
   })
 
@@ -58,8 +60,11 @@ describe('createLink use case', () => {
     })
     const createLink = makeCreateLinkUseCase(repository)
 
-    await expect(
-      createLink({ originalUrl: link.originalUrl, shortCode: link.shortCode }),
-    ).rejects.toBeInstanceOf(ShortCodeAlreadyExistsError)
+    const result = await createLink({ originalUrl: link.originalUrl, shortCode: link.shortCode })
+
+    expect(result.success).toBeFalse()
+    if (!result.success) {
+      expect(result.error.name).toBe('ShortCodeAlreadyExistsError')
+    }
   })
 })

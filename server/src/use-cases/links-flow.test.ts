@@ -3,7 +3,6 @@ import { describe, expect, test } from 'bun:test'
 import { InvalidLinksCursorRepositoryError } from '../repositories'
 import { InMemoryLinksRepository } from '../test/in-memory-links-repository'
 import { makeDeleteLinkUseCase } from './delete-link'
-import { InvalidLinksCursorError, LinkNotFoundError } from './errors'
 import { makeGetLinkUseCase } from './get-link'
 import { makeIncrementLinkAccessUseCase } from './increment-link-access'
 import { makeListLinksUseCase } from './list-links'
@@ -16,17 +15,24 @@ describe('links use cases', () => {
       shortCode: 'one',
     })
 
-    expect(await makeGetLinkUseCase(repository)('one')).toEqual(created)
-    await makeDeleteLinkUseCase(repository)('one')
-    await expect(makeGetLinkUseCase(repository)('one')).rejects.toBeInstanceOf(LinkNotFoundError)
+    expect(await makeGetLinkUseCase(repository)('one')).toEqual({ success: true, value: created })
+    expect(await makeDeleteLinkUseCase(repository)('one')).toEqual({
+      success: true,
+      value: undefined,
+    })
+    const missing = await makeGetLinkUseCase(repository)('one')
+    expect(missing.success).toBeFalse()
   })
 
   test('rejects deletion of an unknown link', async () => {
     const repository = new InMemoryLinksRepository()
 
-    await expect(makeDeleteLinkUseCase(repository)('missing')).rejects.toBeInstanceOf(
-      LinkNotFoundError,
-    )
+    const result = await makeDeleteLinkUseCase(repository)('missing')
+
+    expect(result.success).toBeFalse()
+    if (!result.success) {
+      expect(result.error.name).toBe('LinkNotFoundError')
+    }
   })
 
   test('increments an existing link and maps repository absence', async () => {
@@ -35,10 +41,10 @@ describe('links use cases', () => {
     const increment = makeIncrementLinkAccessUseCase(repository)
 
     expect(await increment('counter')).toEqual({
-      accessCount: 1,
-      originalUrl: 'https://example.com',
+      success: true,
+      value: { accessCount: 1, originalUrl: 'https://example.com' },
     })
-    await expect(increment('missing')).rejects.toBeInstanceOf(LinkNotFoundError)
+    expect((await increment('missing')).success).toBeFalse()
   })
 
   test('lists a page and maps an invalid repository cursor', async () => {
@@ -46,14 +52,20 @@ describe('links use cases', () => {
     await repository.create({ originalUrl: 'https://example.com', shortCode: 'listed' })
     const list = makeListLinksUseCase(repository)
 
-    expect((await list({ limit: 20 })).items).toHaveLength(1)
+    const page = await list({ limit: 20 })
+    expect(page.success).toBeTrue()
+    if (page.success) {
+      expect(page.value.items).toHaveLength(1)
+    }
     const failingRepository = new InMemoryLinksRepository()
     failingRepository.list = async () => {
       throw new InvalidLinksCursorRepositoryError()
     }
 
-    await expect(makeListLinksUseCase(failingRepository)({ limit: 20 })).rejects.toBeInstanceOf(
-      InvalidLinksCursorError,
-    )
+    const invalidCursor = await makeListLinksUseCase(failingRepository)({ limit: 20 })
+    expect(invalidCursor.success).toBeFalse()
+    if (!invalidCursor.success) {
+      expect(invalidCursor.error.name).toBe('InvalidLinksCursorError')
+    }
   })
 })

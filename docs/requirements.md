@@ -14,9 +14,9 @@ Este documento é a fonte de verdade do escopo obrigatório. Um item só pode mu
 | BE-05 | Obter URL original por `shortCode` | Concluído | Testes 200 e 404 |
 | BE-06 | Listar links de forma performática | Em andamento | Cursor e índice concluídos; `EXPLAIN ANALYZE` pendente |
 | BE-07 | Incrementar acessos por `shortCode` | Concluído | Atualização atômica e teste concorrente |
-| BE-08 | Exportar links em CSV | Não iniciado | Teste de conteúdo e cabeçalhos |
-| BE-09 | Disponibilizar CSV via CDN | Não iniciado | URL pública retornada pela API |
-| BE-10 | Gerar nome aleatório e único | Não iniciado | UUID no nome do objeto |
+| BE-08 | Exportar links em CSV | Concluído | Testes de conteúdo, escaping e rota HTTP |
+| BE-09 | Disponibilizar CSV via CDN | Em andamento | Adapter e URL cobertos; acesso R2 real pendente |
+| BE-10 | Gerar nome aleatório e único | Concluído | UUID no nome do objeto e teste de unicidade |
 | BE-11 | Habilitar CORS | Concluído | Registro de `@fastify/cors` e teste/build |
 | BE-12 | Usar TypeScript, Fastify, Drizzle e PostgreSQL | Em andamento | Dependências e implementação final |
 | BE-13 | Disponibilizar script `db:migrate` | Concluído | `server/package.json` e comando raiz |
