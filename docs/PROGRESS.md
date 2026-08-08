@@ -99,6 +99,12 @@
 - Testes unitários e HTTP cobrem handlers, use cases e a composição com repository injetado.
 - Próxima ação: implementar e testar o adapter Drizzle/Postgres por trás da porta existente.
 
+### 2026-08-07 — Infraestrutura local
+
+- Adicionado `infra/dev/compose.yml` com PostgreSQL persistente para desenvolvimento.
+- Separado o banco de desenvolvimento (`5432`) do banco efêmero de testes (`5433`).
+- Criados os comandos `infra:dev`, `infra:down`, `infra:logs` e `dev:full`.
+
 ### 2026-08-07
 
 - Criada a fundação específica do desafio a partir de um workspace vazio.

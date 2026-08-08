@@ -26,6 +26,8 @@ entre enunciado, implementação e evidências está em
 ├── web/                    # React + TypeScript + Vite SPA
 ├── server/                 # Fastify + Drizzle + PostgreSQL
 │   └── Dockerfile          # Imagem de produção da API
+├── infra/                  # Infraestrutura local de desenvolvimento
+│   └── dev/                # PostgreSQL via Docker Compose
 ├── docs/
 │   ├── decisions/          # Decisões arquiteturais
 │   ├── tasks/              # Fatias executáveis
@@ -41,7 +43,7 @@ entre enunciado, implementação e evidências está em
 
 - Bun 1.3.14
 - PostgreSQL
-- Docker, apenas para construir ou executar a imagem da API
+- Docker, para executar a infraestrutura local ou a imagem da API
 
 ## Configuração
 
@@ -59,8 +61,12 @@ arquivos `.env` reais não devem ser versionados.
 | Comando | Finalidade |
 | --- | --- |
 | `bun run dev` | Executa web e server em modo de desenvolvimento |
+| `bun run dev:full` | Sobe PostgreSQL e depois executa web e server |
 | `bun run dev:web` | Executa somente a SPA |
 | `bun run dev:server` | Executa somente a API |
+| `bun run infra:dev` | Sobe o PostgreSQL de desenvolvimento |
+| `bun run infra:down` | Para o PostgreSQL de desenvolvimento |
+| `bun run infra:logs` | Exibe os logs do PostgreSQL |
 | `bun run db:generate` | Gera migrations do Drizzle |
 | `bun run db:migrate` | Executa as migrations do banco |
 | `bun run lint` | Verifica lint e formatação |
