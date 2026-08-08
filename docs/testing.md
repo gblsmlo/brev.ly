@@ -62,6 +62,14 @@ bun run test:db:down
 O `compose.test.yml` publica somente em `127.0.0.1:5433`, possui healthcheck e guarda os dados
 em `tmpfs`. O banco de testes é separado do banco de desenvolvimento.
 
+Se a porta `5433` já estiver ocupada, use o mesmo valor alternativo no Compose e na URL:
+
+```bash
+POSTGRES_TEST_PORT=5434 bun run test:db:up
+DATABASE_URL=postgresql://postgres:postgres@localhost:5434/brevly_test bun run test:db:migrate
+DATABASE_URL=postgresql://postgres:postgres@localhost:5434/brevly_test bun run test:integration
+```
+
 ## Referências
 
 - [Configuração do Bun Test](https://bun.com/docs/test/configuration)

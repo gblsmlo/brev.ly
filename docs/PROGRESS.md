@@ -105,6 +105,14 @@
 - Separado o banco de desenvolvimento (`5432`) do banco efêmero de testes (`5433`).
 - Criados os comandos `infra:dev`, `infra:down`, `infra:logs` e `dev:full`.
 
+### 2026-08-07 — Repository de links
+
+- Criado schema Drizzle com constraint única e índice composto para paginação por cursor.
+- Geradas e aplicadas migrations nos bancos de desenvolvimento e testes.
+- Implementado `createLinksRepository` com CRUD inicial, listagem keyset e incremento atômico.
+- Traduzida a violação PostgreSQL `23505` para conflito conhecido pelo use case.
+- Seis testes de integração aprovados, incluindo dez incrementos concorrentes.
+
 ### 2026-08-07
 
 - Criada a fundação específica do desafio a partir de um workspace vazio.

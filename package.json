@@ -25,7 +25,7 @@
     "test:db:down": "docker compose -f compose.test.yml down",
     "test:db:migrate": "bun --env-file=../.env.test run --cwd server db:migrate",
     "test:db:up": "docker compose -f compose.test.yml up --detach --wait",
-    "test:integration": "bun --env-file=.env.test test --isolate --pass-with-no-tests integration",
+    "test:integration": "RUN_INTEGRATION_TESTS=true bun --env-file=.env.test test --isolate --pass-with-no-tests integration",
     "test:e2e": "playwright test",
     "test:server": "bun test --isolate server",
     "test:watch": "bun test --isolate --watch",

@@ -1,7 +1,7 @@
 import { describe, expect, mock, test } from 'bun:test'
 
 import type { Link } from '../contracts'
-import type { LinksRepository } from '../repositories'
+import { DuplicateShortCodeRepositoryError, type LinksRepository } from '../repositories'
 import { makeCreateLinkUseCase } from './create-link'
 import { ShortCodeAlreadyExistsError } from './errors'
 
@@ -48,5 +48,18 @@ describe('createLink use case', () => {
       createLink({ originalUrl: link.originalUrl, shortCode: link.shortCode }),
     ).rejects.toBeInstanceOf(ShortCodeAlreadyExistsError)
     expect(repository.create).not.toHaveBeenCalled()
+  })
+
+  test('maps a concurrent database conflict to the domain error', async () => {
+    const repository = makeRepository({
+      create: mock(async () => {
+        throw new DuplicateShortCodeRepositoryError()
+      }),
+    })
+    const createLink = makeCreateLinkUseCase(repository)
+
+    await expect(
+      createLink({ originalUrl: link.originalUrl, shortCode: link.shortCode }),
+    ).rejects.toBeInstanceOf(ShortCodeAlreadyExistsError)
   })
 })

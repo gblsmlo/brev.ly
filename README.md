@@ -10,7 +10,7 @@ Este repositório contém os três escopos avaliados pelo desafio: front-end, ba
 | Fase | Situação | Evidência |
 | --- | --- | --- |
 | 1. Fundação e contratos | Concluída | Estrutura, specs, testes e builds locais |
-| 2. Persistência e API | Não iniciada | — |
+| 2. Persistência e API | Em andamento | Schema, migrations, repository e criação inicial |
 | 3. Interface SPA | Não iniciada | — |
 | 4. CSV e CDN | Não iniciada | — |
 | 5. Aceitação e entrega | Não iniciada | — |

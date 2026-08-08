@@ -27,4 +27,11 @@ server.ts
 
 As rotas e handlers não devem importar o driver `pg` ou o schema Drizzle diretamente. Os handlers
 também não substituem os use cases: eles apenas traduzem HTTP para a aplicação. A próxima etapa
-pode implementar `createLinksRepository` atrás de `LinksRepository` sem alterar o bootstrap HTTP.
+implementa novos casos de uso sobre `createLinksRepository` sem alterar o adapter HTTP ou o driver.
+
+## Persistência de links
+
+`createLinksRepository` recebe a conexão Drizzle e a URL pública do front-end por injeção. O
+adapter concentra SQL, mapeamento de datas e URL curta, tradução de constraint única, incremento
+atômico e paginação keyset por `(created_at, id)`. O pool PostgreSQL é criado no composition root e
+encerrado no hook `onClose` do Fastify.

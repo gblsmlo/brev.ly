@@ -1,5 +1,5 @@
 import type { CreateLinkBody, Link } from '../contracts'
-import type { LinksRepository } from '../repositories'
+import { DuplicateShortCodeRepositoryError, type LinksRepository } from '../repositories'
 import { ShortCodeAlreadyExistsError } from './errors'
 
 export type CreateLinkUseCase = (input: CreateLinkBody) => Promise<Link>
@@ -12,6 +12,14 @@ export function makeCreateLinkUseCase(repository: LinksRepository): CreateLinkUs
       throw new ShortCodeAlreadyExistsError()
     }
 
-    return repository.create(input)
+    try {
+      return await repository.create(input)
+    } catch (error) {
+      if (error instanceof DuplicateShortCodeRepositoryError) {
+        throw new ShortCodeAlreadyExistsError()
+      }
+
+      throw error
+    }
   }
 }
