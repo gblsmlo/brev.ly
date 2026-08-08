@@ -50,10 +50,10 @@ usa PostgreSQL em `127.0.0.1:5433`; não usar o banco de desenvolvimento.
 | BE-T15 | Exportar coleção em CSV | Unidade/API | `201`, content-type/colunas corretos e dados completos | Aprovado |
 | BE-T16 | Exportar coleção vazia | Unidade/API | CSV válido com cabeçalho e zero linhas de dados | Aprovado |
 | BE-T17 | Gerar dois relatórios | Unidade/Integração | Nomes diferentes, aleatórios e sem colisão | Aprovado |
-| BE-T18 | Publicar relatório no armazenamento CDN | Integração | URL pública retornada e objeto acessível | Adapter aprovado; R2 real pendente |
+| BE-T18 | Publicar relatório no armazenamento CDN | Integração | URL pública retornada e objeto acessível | Aprovado com R2 real |
 | BE-T19 | Falha do armazenamento durante exportação | Unidade/API | Erro controlado `EXPORT_FAILED`; sem URL falsa | Aprovado |
 | BE-T20 | Confirmar colunas do CSV | Unidade | `original_url`, `short_url`, `access_count`, `created_at` | Aprovado |
-| BE-T21 | Verificar paginação em tabela grande | Performance | Plano usa índice `(created_at, id)` e não depende de `OFFSET` | Planejado |
+| BE-T21 | Verificar paginação em tabela grande | Performance | Plano usa índice `(created_at, id)` e não depende de `OFFSET` | Aprovado com 10 mil registros |
 | BE-T22 | Validar CORS preflight | API | Origem configurada recebe headers CORS; origem indevida é rejeitada | Aprovado |
 
 ## Front-end
@@ -100,5 +100,6 @@ Figma ainda requer revisão manual porque o arquivo fornecido exige autenticaç�
 
 - BE-T01–BE-T14 e BE-T22 passaram nos testes HTTP com repository injetado.
 - Sete testes PostgreSQL validaram constraint única, cursor, exclusão e incremento concorrente.
-- BE-T15–BE-T17 e BE-T19–BE-T20 estão GREEN; BE-T18 aguarda validação com um bucket R2 real.
-- BE-T21 mantém pendente a evidência com `EXPLAIN ANALYZE` em tabela grande.
+- BE-T15–BE-T21 estão GREEN; BE-T18 foi validado com upload e leitura reais no Cloudflare R2.
+- BE-T21 foi validado com `EXPLAIN ANALYZE` em uma tabela de 10 mil registros. O teste também
+  corrigiu a ordenação para usar `DESC NULLS LAST`, alinhada ao índice keyset.

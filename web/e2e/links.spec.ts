@@ -1,8 +1,12 @@
 import { expect, test } from '@playwright/test'
 
 const validLink = {
+  id: '00000000-0000-4000-8000-000000000001',
   originalUrl: 'https://example.com/articles/contract-first',
   shortCode: 'contract-first',
+  shortUrl: 'http://127.0.0.1:5173/contract-first',
+  accessCount: 0,
+  createdAt: '2026-08-07T12:00:00.000Z',
 }
 
 async function mockEmptyLinks(page: Parameters<typeof test>[0]['page']) {
@@ -174,10 +178,13 @@ test.describe('Brev.ly front-end RED journeys', () => {
     await mockEmptyLinks(page)
     await page.route('**/links/export', async (route) => {
       await route.fulfill({
-        body: JSON.stringify({ reportUrl: 'https://cdn.example.com/reports/report.csv' }),
+        body: JSON.stringify({ reportUrl: 'http://127.0.0.1:5173/reports/report.csv' }),
         contentType: 'application/json',
         status: 201,
       })
+    })
+    await page.route('**/reports/report.csv', async (route) => {
+      await route.fulfill({ body: 'originalUrl,shortUrl,accessCount,createdAt\n' })
     })
     await page.goto('/')
 

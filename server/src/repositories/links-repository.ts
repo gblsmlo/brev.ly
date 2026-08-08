@@ -1,6 +1,6 @@
 import { Buffer } from 'node:buffer'
 
-import { and, desc, eq, lt, or, sql } from 'drizzle-orm'
+import { and, eq, lt, or, sql } from 'drizzle-orm'
 
 import type { CreateLinkBody, Link } from '../contracts'
 import type { Database } from '../database/client'
@@ -146,7 +146,7 @@ export function createLinksRepository({
         .select()
         .from(links)
         .where(cursorCondition)
-        .orderBy(desc(links.createdAt), desc(links.id))
+        .orderBy(sql`${links.createdAt} desc nulls last`, sql`${links.id} desc nulls last`)
         .limit(limit + 1)
       const hasNextPage = records.length > limit
       const pageRecords = hasNextPage ? records.slice(0, limit) : records

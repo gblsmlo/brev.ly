@@ -2,17 +2,17 @@
 
 ## Estado atual
 
-**Fases 2 e 4 — Em andamento**
+**Fase 5 — Aceitação e entrega**
 
 ## Fases
 
 | Fase | Estado |
 | --- | --- |
 | 1. Fundação e contratos | Concluída |
-| 2. Persistência e API | Em andamento |
-| 3. Interface SPA | Não iniciada |
-| 4. CSV e CDN | Em andamento |
-| 5. Aceitação e entrega | Não iniciada |
+| 2. Persistência e API | Concluída |
+| 3. Interface SPA | Em andamento |
+| 4. CSV e CDN | Concluída |
+| 5. Aceitação e entrega | Em andamento |
 
 ## Fase 1
 
@@ -147,6 +147,16 @@
 - Layout responsivo mobile-first implementado em CSS, com estados de ação bloqueada.
 - As 14 jornadas Playwright FE-T01–FE-T14 passaram em Chromium.
 - Próxima ação: revisar a fidelidade visual com o Figma e depois configurar o Cloudflare R2 real.
+
+### 2026-08-07 — Aceitação de performance e CDN
+
+- Configuradas as credenciais locais do Cloudflare R2 sem versionar segredos.
+- `POST /links/export` retornou `201`, publicou o objeto e a URL pública retornou `200 OK` com
+  `Content-Type: text/csv; charset=utf-8`.
+- Criado BE-T21 com 10 mil registros e `EXPLAIN (ANALYZE, FORMAT JSON)`.
+- O plano passou a usar o índice keyset após alinhar a consulta com `DESC NULLS LAST`.
+- A integração PostgreSQL passou com oito cenários, incluindo performance.
+- Pendência restante: revisão visual fiel ao Figma, que exige acesso autenticado neste ambiente.
 
 ### 2026-08-07
 

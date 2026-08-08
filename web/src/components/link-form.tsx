@@ -10,7 +10,7 @@ export function LinkForm({ onSubmit }: LinkFormProps) {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting, isValid, touchedFields },
+    formState: { errors, isSubmitting },
   } = useForm<CreateLinkBody>({
     defaultValues: { originalUrl: '', shortCode: '' },
     mode: 'onChange',
@@ -25,11 +25,12 @@ export function LinkForm({ onSubmit }: LinkFormProps) {
         <input
           id="original-url"
           type="url"
+          aria-label="URL original"
           placeholder="www.exemplo.com.br"
           aria-invalid={errors.originalUrl ? 'true' : 'false'}
           {...register('originalUrl')}
         />
-        {touchedFields.originalUrl && errors.originalUrl?.message && (
+        {errors.originalUrl?.message && (
           <span className="field-error">{errors.originalUrl.message}</span>
         )}
         <label htmlFor="short-code">LINK ENCURTADO</label>
@@ -37,16 +38,17 @@ export function LinkForm({ onSubmit }: LinkFormProps) {
           <span>brev.ly/</span>
           <input
             id="short-code"
+            aria-label="URL encurtada"
             placeholder="seu-link"
             aria-invalid={errors.shortCode ? 'true' : 'false'}
             {...register('shortCode')}
           />
         </div>
-        {touchedFields.shortCode && errors.shortCode?.message && (
+        {errors.shortCode?.message && (
           <span className="field-error">{errors.shortCode.message}</span>
         )}
-        <button className="button primary" type="submit" disabled={!isValid || isSubmitting}>
-          {isSubmitting ? 'Salvando…' : 'Salvar link'}
+        <button className="button primary" type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Salvando…' : 'Criar link'}
         </button>
       </form>
     </section>

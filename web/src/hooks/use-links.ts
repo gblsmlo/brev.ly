@@ -20,7 +20,7 @@ export function useLinks() {
       .then((loadedLinks) => {
         startTransition(() => setLinks(loadedLinks))
       })
-      .catch(() => undefined)
+      .catch(() => setError('Não foi possível carregar os links.'))
       .finally(() => setLoading(false))
   }, [])
 
@@ -53,7 +53,13 @@ export function useLinks() {
   async function downloadCsv() {
     try {
       const url = await exportLinks()
-      window.open(url, '_blank', 'noopener,noreferrer')
+      const anchor = document.createElement('a')
+      anchor.href = url
+      anchor.download = 'brevly-links.csv'
+      anchor.rel = 'noreferrer'
+      document.body.append(anchor)
+      anchor.click()
+      anchor.remove()
     } catch {
       setError('Não foi possível gerar o CSV.')
     }

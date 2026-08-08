@@ -6,7 +6,7 @@ export const shortCodeSchema = z
   .string()
   .regex(
     SHORT_CODE_PATTERN,
-    'O encurtamento deve ter entre 3 e 30 caracteres e usar apenas letras, números, hífen ou sublinhado.',
+    'Encurtamento inválido: use entre 3 e 30 caracteres, apenas letras, números, hífen ou sublinhado.',
   )
 
 export const httpUrlSchema = z

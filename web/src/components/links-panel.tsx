@@ -10,7 +10,7 @@ type LinksPanelProps = {
 
 export function LinksPanel({ links, loading, pending, onDelete, onExport }: LinksPanelProps) {
   const isEmpty = links.length === 0 && !loading
-  const buttonDisabled = loading || pending || isEmpty
+  const buttonDisabled = loading || pending
 
   return (
     <section className="panel my-links" aria-labelledby="my-links-title">
@@ -26,9 +26,11 @@ export function LinksPanel({ links, loading, pending, onDelete, onExport }: Link
         </button>
       </header>
       {loading ? (
-        <p className="empty-copy">Carregando…</p>
+        <p className="empty-copy" data-testid="links-loading">
+          Carregando…
+        </p>
       ) : isEmpty ? (
-        <div className="empty-copy">
+        <div className="empty-copy" data-testid="links-empty-state">
           <span className="empty-icon" aria-hidden="true">
             <svg
               aria-hidden="true"

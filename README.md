@@ -5,15 +5,15 @@ Este repositório contém os três escopos avaliados pelo desafio: front-end, ba
 
 ## Estado do projeto
 
-**Fase atual:** 2 — Persistência e API.
+**Fase atual:** 5 — Aceitação e entrega.
 
 | Fase | Situação | Evidência |
 | --- | --- | --- |
 | 1. Fundação e contratos | Concluída | Estrutura, specs, testes e builds locais |
-| 2. Persistência e API | Em andamento | CRUD completo; evidência de performance pendente |
+| 2. Persistência e API | Concluída | CRUD, cursor e plano de performance aprovados |
 | 3. Interface SPA | Em andamento | Jornadas FE-T01–FE-T14 aprovadas; revisão visual do Figma pendente |
-| 4. CSV e CDN | Em andamento | CSV, rota e adapter R2 implementados; validação real pendente |
-| 5. Aceitação e entrega | Não iniciada | — |
+| 4. CSV e CDN | Concluída | Upload e acesso real ao Cloudflare R2 aprovados |
+| 5. Aceitação e entrega | Em andamento | Validação final e revisão visual |
 
 O acompanhamento detalhado está em [docs/PROGRESS.md](docs/PROGRESS.md). A rastreabilidade
 entre enunciado, implementação e evidências está em

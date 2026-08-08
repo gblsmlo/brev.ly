@@ -12,13 +12,13 @@ Este documento é a fonte de verdade do escopo obrigatório. Um item só pode mu
 | BE-03 | Rejeitar encurtamento já existente | Concluído | Restrição única e teste 409 |
 | BE-04 | Deletar por `shortCode` | Concluído | Testes 204 e 404 |
 | BE-05 | Obter URL original por `shortCode` | Concluído | Testes 200 e 404 |
-| BE-06 | Listar links de forma performática | Em andamento | Cursor e índice concluídos; `EXPLAIN ANALYZE` pendente |
+| BE-06 | Listar links de forma performática | Concluído | Cursor, índice e `EXPLAIN ANALYZE` com 10 mil registros |
 | BE-07 | Incrementar acessos por `shortCode` | Concluído | Atualização atômica e teste concorrente |
 | BE-08 | Exportar links em CSV | Concluído | Testes de conteúdo, escaping e rota HTTP |
-| BE-09 | Disponibilizar CSV via CDN | Em andamento | Adapter e URL cobertos; acesso R2 real pendente |
+| BE-09 | Disponibilizar CSV via CDN | Concluído | Upload real e `200 OK` na URL pública R2 |
 | BE-10 | Gerar nome aleatório e único | Concluído | UUID no nome do objeto e teste de unicidade |
 | BE-11 | Habilitar CORS | Concluído | Registro de `@fastify/cors` e teste/build |
-| BE-12 | Usar TypeScript, Fastify, Drizzle e PostgreSQL | Em andamento | Dependências e implementação final |
+| BE-12 | Usar TypeScript, Fastify, Drizzle e PostgreSQL | Concluído | Stack implementada e validada em build/testes |
 | BE-13 | Disponibilizar script `db:migrate` | Concluído | `server/package.json` e comando raiz |
 | BE-14 | Fornecer `.env.example` completo | Concluído | `server/.env.example` |
 | BE-15 | Fornecer Dockerfile da aplicação | Concluído | `server/Dockerfile` multi-stage |
@@ -43,7 +43,7 @@ Este documento é a fonte de verdade do escopo obrigatório. Um item só pode mu
 
 | ID | Requisito | Estado | Evidência esperada |
 | --- | --- | --- | --- |
-| DL-01 | Repositório público no GitHub | Não iniciado | URL pública |
+| DL-01 | Repositório público no GitHub | Concluído | https://github.com/gblsmlo/brev.ly |
 | DL-02 | Pastas raiz `web` e `server` | Concluído | Árvore do repositório |
-| DL-03 | Código obrigatório preservado na branch principal | Em andamento | Histórico e revisão final |
+| DL-03 | Código obrigatório preservado na branch principal | Concluído | `main` remoto atualizado e histórico inicial preservado |
 | DL-04 | Front-end, back-end e DevOps documentados | Em andamento | README e documentação final |
