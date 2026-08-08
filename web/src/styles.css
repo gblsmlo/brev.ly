@@ -85,6 +85,11 @@ label {
   font-size: 10px;
   line-height: 14px;
 }
+.field-error {
+  color: #b12c4d;
+  font-size: 10px;
+  line-height: 14px;
+}
 input {
   width: 100%;
   height: 44px;
