@@ -60,8 +60,8 @@ arquivos `.env` reais não devem ser versionados.
 
 | Comando | Finalidade |
 | --- | --- |
-| `bun run dev` | Executa web e server em modo de desenvolvimento |
-| `bun run dev:full` | Sobe PostgreSQL e depois executa web e server |
+| `bun run dev` | Sobe PostgreSQL e executa web e server em modo de desenvolvimento |
+| `bun run dev:full` | Alias para `bun run dev` |
 | `bun run dev:web` | Executa somente a SPA |
 | `bun run dev:server` | Executa somente a API |
 | `bun run infra:dev` | Sobe o PostgreSQL de desenvolvimento |
