@@ -1,5 +1,6 @@
 services:
   postgres:
+    container_name: brev.ly
     image: postgres:17-alpine
     environment:
       POSTGRES_DB: ${POSTGRES_DB:-brevly}
