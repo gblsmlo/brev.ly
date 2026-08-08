@@ -60,20 +60,20 @@ usa PostgreSQL em `127.0.0.1:5433`; não usar o banco de desenvolvimento.
 
 | ID | Caso | Tipo | Resultado esperado | Estado |
 | --- | --- | --- | --- | --- |
-| FE-T01 | Abrir `/` sem links | Navegador | Formulário visível e empty state apresentado | Planejado |
-| FE-T02 | Criar link válido pelo formulário | Navegador/API | Link aparece na listagem após sucesso | Planejado |
-| FE-T03 | Enviar código mal formatado | Componente/Navegador | Validação visível; requisição não é enviada | Planejado |
-| FE-T04 | Enviar código duplicado | Navegador/API | Erro `409` apresentado sem apagar dados existentes | Planejado |
-| FE-T05 | Excluir link | Navegador/API | Ação bloqueia durante request e item desaparece após `204` | Planejado |
-| FE-T06 | Listar links cadastrados | Navegador/API | Todas as colunas necessárias são exibidas | Planejado |
-| FE-T07 | Acessar `/:shortCode` existente | Navegador/API | Busca, incrementa e redireciona para URL original | Planejado |
-| FE-T08 | Acessar `/:shortCode` inexistente | Navegador/API | Página de recurso não encontrado | Planejado |
-| FE-T09 | Digitar rota fora do padrão | Navegador | Página de recurso não encontrado | Planejado |
-| FE-T10 | Baixar relatório CSV | Navegador/API | Download iniciado usando URL CDN retornada | Planejado |
-| FE-T11 | Falha de API durante criação/listagem/exclusão | Navegador | Mensagem de erro, sem estado falso ou ação duplicada | Planejado |
-| FE-T12 | Loading e bloqueio de ações | Componente/Navegador | Botões e formulário refletem estado assíncrono | Planejado |
-| FE-T13 | Layout em viewport mobile | Navegador | Conteúdo utilizável sem overflow horizontal | Planejado |
-| FE-T14 | Layout em viewport desktop | Navegador | Formulário, listagem e ações permanecem legíveis | Planejado |
+| FE-T01 | Abrir `/` sem links | Navegador | Formulário visível e empty state apresentado | Aprovado |
+| FE-T02 | Criar link válido pelo formulário | Navegador/API | Link aparece na listagem após sucesso | Aprovado |
+| FE-T03 | Enviar código mal formatado | Componente/Navegador | Validação visível; requisição não é enviada | Aprovado |
+| FE-T04 | Enviar código duplicado | Navegador/API | Erro `409` apresentado sem apagar dados existentes | Aprovado |
+| FE-T05 | Excluir link | Navegador/API | Ação bloqueia durante request e item desaparece após `204` | Aprovado |
+| FE-T06 | Listar links cadastrados | Navegador/API | Todas as colunas necessárias são exibidas | Aprovado |
+| FE-T07 | Acessar `/:shortCode` existente | Navegador/API | Busca, incrementa e redireciona para URL original | Aprovado |
+| FE-T08 | Acessar `/:shortCode` inexistente | Navegador/API | Página de recurso não encontrado | Aprovado |
+| FE-T09 | Digitar rota fora do padrão | Navegador | Página de recurso não encontrado | Aprovado |
+| FE-T10 | Baixar relatório CSV | Navegador/API | Download iniciado usando URL CDN retornada | Aprovado |
+| FE-T11 | Falha de API durante criação/listagem/exclusão | Navegador | Mensagem de erro, sem estado falso ou ação duplicada | Aprovado |
+| FE-T12 | Loading e bloqueio de ações | Componente/Navegador | Botões e formulário refletem estado assíncrono | Aprovado |
+| FE-T13 | Layout em viewport mobile | Navegador | Conteúdo utilizável sem overflow horizontal | Aprovado |
+| FE-T14 | Layout em viewport desktop | Navegador | Formulário, listagem e ações permanecem legíveis | Aprovado |
 
 ## Portões de aceite
 
@@ -86,8 +86,8 @@ usa PostgreSQL em `127.0.0.1:5433`; não usar o banco de desenvolvimento.
 
 ## Execução RED — 2026-08-07
 
-As células da matriz continuam como **Planejado** até a etapa GREEN; a existência da
-especificação RED não significa que a funcionalidade foi aceita.
+As jornadas FE-T01–FE-T14 foram executadas em Chromium e estão GREEN. A fidelidade visual ao
+Figma ainda requer revisão manual porque o arquivo fornecido exige autenticação neste ambiente.
 
 - Back-end: 37 testes executados; 36 falharam e 1 passou (preflight CORS). As falhas confirmam
   as lacunas esperadas em rotas, schema Drizzle, repository e exportador CSV/CDN.

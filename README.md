@@ -11,7 +11,7 @@ Este repositório contém os três escopos avaliados pelo desafio: front-end, ba
 | --- | --- | --- |
 | 1. Fundação e contratos | Concluída | Estrutura, specs, testes e builds locais |
 | 2. Persistência e API | Em andamento | CRUD completo; evidência de performance pendente |
-| 3. Interface SPA | Não iniciada | — |
+| 3. Interface SPA | Em andamento | Jornadas FE-T01–FE-T14 aprovadas; revisão visual do Figma pendente |
 | 4. CSV e CDN | Em andamento | CSV, rota e adapter R2 implementados; validação real pendente |
 | 5. Aceitação e entrega | Não iniciada | — |
 

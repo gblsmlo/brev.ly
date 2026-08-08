@@ -28,15 +28,15 @@ Este documento é a fonte de verdade do escopo obrigatório. Um item só pode mu
 | ID | Requisito | Estado | Evidência esperada |
 | --- | --- | --- | --- |
 | FE-01 | SPA React, TypeScript e Vite sem framework | Concluído | Build apenas cliente |
-| FE-02 | Página `/` com formulário e listagem | Não iniciado | Testes de componente e navegador |
-| FE-03 | Página `/:shortCode` com redirecionamento | Em andamento | Rota criada; integração pendente |
-| FE-04 | Página de recurso não encontrado | Em andamento | Rota criada; layout final pendente |
-| FE-05 | Validar formato e conflitos no formulário | Não iniciado | Testes de formulário e erros da API |
-| FE-06 | Excluir link | Não iniciado | Teste de interação |
-| FE-07 | Incrementar acesso e redirecionar | Não iniciado | Teste da jornada |
-| FE-08 | Baixar CSV | Não iniciado | Teste de interação com URL da CDN |
-| FE-09 | Loading, bloqueio de ações e empty state | Não iniciado | Stories/testes e navegador |
-| FE-10 | Layout fiel ao Figma e responsivo | Não iniciado | Comparação visual desktop/mobile |
+| FE-02 | Página `/` com formulário e listagem | Concluído | FE-T01, FE-T02 e FE-T06 |
+| FE-03 | Página `/:shortCode` com redirecionamento | Concluído | FE-T07 |
+| FE-04 | Página de recurso não encontrado | Concluído | FE-T08 e FE-T09 |
+| FE-05 | Validar formato e conflitos no formulário | Concluído | FE-T03 e FE-T04 |
+| FE-06 | Excluir link | Concluído | FE-T05 |
+| FE-07 | Incrementar acesso e redirecionar | Concluído | FE-T07 |
+| FE-08 | Baixar CSV | Concluído | FE-T10 |
+| FE-09 | Loading, bloqueio de ações e empty state | Concluído | FE-T01, FE-T11 e FE-T12 |
+| FE-10 | Layout fiel ao Figma e responsivo | Em andamento | FE-T13 e FE-T14; revisão visual do Figma pendente |
 | FE-11 | Fornecer `.env.example` completo | Concluído | `web/.env.example` |
 
 ## Entrega

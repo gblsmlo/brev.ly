@@ -51,7 +51,7 @@ test.describe('Brev.ly front-end RED journeys', () => {
     await page.getByLabel('URL encurtada').fill(validLink.shortCode)
     await page.getByRole('button', { name: 'Criar link' }).click()
 
-    await expect(page.getByText(validLink.shortCode)).toBeVisible()
+    await expect(page.getByRole('link', { name: validLink.shortCode })).toBeVisible()
   })
 
   test('FE-T03 blocks malformed short codes before the request', async ({ page }) => {
@@ -91,7 +91,7 @@ test.describe('Brev.ly front-end RED journeys', () => {
     await page.getByRole('button', { name: 'Criar link' }).click()
 
     await expect(page.getByText(/já existe/i)).toBeVisible()
-    await expect(page.getByText(validLink.shortCode)).toBeVisible()
+    await expect(page.getByRole('link', { name: validLink.shortCode })).toBeVisible()
   })
 
   test('FE-T05 deletes a link and blocks the action while pending', async ({ page }) => {

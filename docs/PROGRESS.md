@@ -138,6 +138,16 @@
 - Falhas inesperadas continuam chegando ao error boundary do Fastify.
 - Decisão e regras de adoção registradas no ADR 003 e no `AGENTS.md`.
 
+### 2026-08-07 — Front-end SPA inicial
+
+- Implementado cliente HTTP com validação Zod dos payloads e tratamento de erros da API.
+- Criada a página `/` com formulário, listagem, empty state, loading, exclusão e download CSV.
+- Criado o fluxo `GET /links/:shortCode` → `PATCH /links/:shortCode/accesses` → redirecionamento.
+- Criada a página de recurso não encontrado para links inexistentes e rotas inválidas.
+- Layout responsivo mobile-first implementado em CSS, com estados de ação bloqueada.
+- As 14 jornadas Playwright FE-T01–FE-T14 passaram em Chromium.
+- Próxima ação: revisar a fidelidade visual com o Figma e depois configurar o Cloudflare R2 real.
+
 ### 2026-08-07
 
 - Criada a fundação específica do desafio a partir de um workspace vazio.
