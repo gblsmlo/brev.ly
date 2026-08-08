@@ -2,7 +2,11 @@ import { afterAll, beforeAll, beforeEach, describe, expect, test } from 'bun:tes
 
 import { createDatabase, type Database } from '../database/client'
 import { links } from '../database/schema'
-import { DuplicateShortCodeRepositoryError } from './errors'
+import {
+  DuplicateShortCodeRepositoryError,
+  InvalidLinksCursorRepositoryError,
+  LinkNotFoundRepositoryError,
+} from './errors'
 import { createLinksRepository } from './links-repository'
 import type { LinksRepository } from './ports'
 
@@ -98,6 +102,14 @@ describeIntegration('createLinksRepository integration', () => {
   test('returns controlled absence results for unknown links', async () => {
     expect(await repository.findByShortCode('not-found')).toBeNull()
     expect(await repository.deleteByShortCode('not-found')).toBeFalse()
-    expect(repository.incrementAccesses('not-found')).rejects.toThrow('Link not found')
+    await expect(repository.incrementAccesses('not-found')).rejects.toBeInstanceOf(
+      LinkNotFoundRepositoryError,
+    )
+  })
+
+  test('rejects an invalid opaque cursor', async () => {
+    await expect(repository.list({ cursor: 'invalid', limit: 20 })).rejects.toBeInstanceOf(
+      InvalidLinksCursorRepositoryError,
+    )
   })
 })

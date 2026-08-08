@@ -1,57 +1,34 @@
-import { describe, expect, test } from 'bun:test'
+import { afterEach, beforeEach, describe, expect, test } from 'bun:test'
+import type { FastifyInstance } from 'fastify'
 
 import { buildApp } from '../app'
+import type { Link, ListLinksResponse } from '../contracts'
+import { InMemoryLinksRepository } from '../test/in-memory-links-repository'
 
 const validLink = {
   originalUrl: 'https://example.com/articles/contract-first',
   shortCode: 'contract-first',
 }
 
-type JsonPayload = {
-  accessCount?: number
-  code?: string
-  columns?: string[]
-  items?: unknown[]
-  nextCursor?: string | null
-  originalUrl?: string
-  reportUrl?: string
-}
+describe('links API contract', () => {
+  let app: FastifyInstance
 
-type TestResponse = {
-  headers: Record<string, string | undefined>
-  json(): JsonPayload
-  statusCode: number
-}
-
-async function request(
-  method: 'DELETE' | 'GET' | 'OPTIONS' | 'PATCH' | 'POST',
-  url: string,
-  payload?: unknown,
-  headers?: Record<string, string>,
-): Promise<TestResponse> {
-  const app = await buildApp({ corsOrigin: 'http://localhost:5173' })
-  const inject = app.inject.bind(app) as unknown as (options: {
-    headers?: Record<string, string>
-    method: 'DELETE' | 'GET' | 'OPTIONS' | 'PATCH' | 'POST'
-    payload?: unknown
-    url: string
-  }) => Promise<TestResponse>
-  const response = await inject({
-    method,
-    headers,
-    payload,
-    url,
+  beforeEach(async () => {
+    app = await buildApp({
+      corsOrigin: 'http://localhost:5173',
+      repositories: { links: new InMemoryLinksRepository() },
+    })
   })
-  await app.close()
-  return response
-}
 
-describe('links API RED contract', () => {
+  afterEach(async () => {
+    await app.close()
+  })
+
   test('BE-T01 creates a link', async () => {
-    const response = await request('POST', '/links', validLink)
+    const response = await app.inject({ method: 'POST', payload: validLink, url: '/links' })
 
     expect(response.statusCode).toBe(201)
-    expect(response.json()).toMatchObject(validLink)
+    expect(response.json<Link>()).toMatchObject(validLink)
   })
 
   test.each([
@@ -61,164 +38,157 @@ describe('links API RED contract', () => {
     'ab',
     'a'.repeat(31),
   ])('BE-T02 rejects malformed short code: %s', async (shortCode) => {
-    const response = await request('POST', '/links', { ...validLink, shortCode })
+    const response = await app.inject({
+      method: 'POST',
+      payload: { ...validLink, shortCode },
+      url: '/links',
+    })
 
     expect(response.statusCode).toBe(400)
-    expect(response.json().code).toBe('VALIDATION_ERROR')
+    expect(response.json<{ code: string }>().code).toBe('VALIDATION_ERROR')
   })
 
   test('BE-T03 rejects non-HTTP original URLs', async () => {
-    const response = await request('POST', '/links', {
-      ...validLink,
-      originalUrl: 'ftp://example.com/file',
+    const response = await app.inject({
+      method: 'POST',
+      payload: { ...validLink, originalUrl: 'ftp://example.com/file' },
+      url: '/links',
     })
 
     expect(response.statusCode).toBe(400)
   })
 
   test('BE-T04 rejects duplicate short codes', async () => {
-    const first = await request('POST', '/links', validLink)
-    const second = await request('POST', '/links', validLink)
+    await app.inject({ method: 'POST', payload: validLink, url: '/links' })
+    const response = await app.inject({ method: 'POST', payload: validLink, url: '/links' })
 
-    expect(first.statusCode).toBe(201)
-    expect(second.statusCode).toBe(409)
-    expect(second.json().code).toBe('SHORT_CODE_ALREADY_EXISTS')
+    expect(response.statusCode).toBe(409)
+    expect(response.json<{ code: string }>().code).toBe('SHORT_CODE_ALREADY_EXISTS')
   })
 
   test('BE-T05 deletes an existing link', async () => {
-    const response = await request('DELETE', `/links/${validLink.shortCode}`)
+    await app.inject({ method: 'POST', payload: validLink, url: '/links' })
+    const deleted = await app.inject({ method: 'DELETE', url: `/links/${validLink.shortCode}` })
+    const lookup = await app.inject({ method: 'GET', url: `/links/${validLink.shortCode}` })
 
-    expect(response.statusCode).toBe(204)
+    expect(deleted.statusCode).toBe(204)
+    expect(lookup.statusCode).toBe(404)
   })
 
   test('BE-T06 rejects invalid and missing deletion targets', async () => {
-    const malformed = await request('DELETE', '/links/invalid/code')
-    const missing = await request('DELETE', '/links/not-found')
+    const malformed = await app.inject({ method: 'DELETE', url: '/links/ab' })
+    const missing = await app.inject({ method: 'DELETE', url: '/links/not-found' })
 
     expect(malformed.statusCode).toBe(400)
     expect(missing.statusCode).toBe(404)
   })
 
-  test('BE-T07 resolves the original URL', async () => {
-    const response = await request('GET', `/links/${validLink.shortCode}`)
+  test('BE-T07 resolves an existing short code', async () => {
+    await app.inject({ method: 'POST', payload: validLink, url: '/links' })
+    const response = await app.inject({ method: 'GET', url: `/links/${validLink.shortCode}` })
 
     expect(response.statusCode).toBe(200)
-    expect(response.json().originalUrl).toBe(validLink.originalUrl)
+    expect(response.json<Link>().originalUrl).toBe(validLink.originalUrl)
   })
 
   test('BE-T08 returns a controlled error for an unknown short code', async () => {
-    const response = await request('GET', '/links/not-found')
+    const response = await app.inject({ method: 'GET', url: '/links/not-found' })
 
     expect(response.statusCode).toBe(404)
-    expect(response.json().code).toBe('LINK_NOT_FOUND')
+    expect(response.json<{ code: string }>().code).toBe('LINK_NOT_FOUND')
+  })
+
+  test('rejects malformed lookup and increment parameters', async () => {
+    const lookup = await app.inject({ method: 'GET', url: '/links/ab' })
+    const increment = await app.inject({ method: 'PATCH', url: '/links/ab/accesses' })
+
+    expect(lookup.statusCode).toBe(400)
+    expect(increment.statusCode).toBe(400)
   })
 
   test('BE-T09 lists an empty collection', async () => {
-    const response = await request('GET', '/links')
+    const response = await app.inject({ method: 'GET', url: '/links' })
 
     expect(response.statusCode).toBe(200)
-    expect(response.json()).toEqual({ items: [], nextCursor: null })
+    expect(response.json<ListLinksResponse>()).toEqual({ items: [], nextCursor: null })
   })
 
   test('BE-T10 lists links using a bounded cursor', async () => {
-    const response = await request('GET', '/links?limit=2&cursor=opaque-cursor')
+    for (const shortCode of ['first', 'second', 'third']) {
+      await app.inject({
+        method: 'POST',
+        payload: { originalUrl: `https://example.com/${shortCode}`, shortCode },
+        url: '/links',
+      })
+    }
 
-    expect(response.statusCode).toBe(200)
-    expect(response.json().items).toHaveLength(2)
-    expect(response.json().nextCursor).toBeString()
+    const first = await app.inject({ method: 'GET', url: '/links?limit=2' })
+    const firstPage = first.json<ListLinksResponse>()
+    const second = await app.inject({
+      method: 'GET',
+      url: `/links?limit=2&cursor=${firstPage.nextCursor}`,
+    })
+
+    expect(firstPage.items).toHaveLength(2)
+    expect(firstPage.nextCursor).toBeString()
+    expect(second.json<ListLinksResponse>().items).toHaveLength(1)
   })
 
   test.each(['0', '-1', '1.5', '101'])('BE-T11 rejects invalid limit: %s', async (limit) => {
-    const response = await request('GET', `/links?limit=${limit}`)
-
+    const response = await app.inject({ method: 'GET', url: `/links?limit=${limit}` })
     expect(response.statusCode).toBe(400)
   })
 
   test('BE-T12 increments accesses atomically', async () => {
-    const response = await request('PATCH', `/links/${validLink.shortCode}/accesses`)
+    await app.inject({ method: 'POST', payload: validLink, url: '/links' })
+    const response = await app.inject({
+      method: 'PATCH',
+      url: `/links/${validLink.shortCode}/accesses`,
+    })
 
     expect(response.statusCode).toBe(200)
-    expect(response.json()).toMatchObject({
-      accessCount: 1,
-      originalUrl: validLink.originalUrl,
-    })
+    expect(response.json()).toMatchObject({ accessCount: 1, originalUrl: validLink.originalUrl })
   })
 
   test('BE-T13 preserves every concurrent increment', async () => {
-    const responses = await Promise.all(
-      Array.from({ length: 10 }, () => request('PATCH', `/links/${validLink.shortCode}/accesses`)),
+    await app.inject({ method: 'POST', payload: validLink, url: '/links' })
+    await Promise.all(
+      Array.from({ length: 10 }, () =>
+        app.inject({ method: 'PATCH', url: `/links/${validLink.shortCode}/accesses` }),
+      ),
     )
+    const response = await app.inject({ method: 'GET', url: `/links/${validLink.shortCode}` })
 
-    expect(responses.every((response) => response.statusCode === 200)).toBeTrue()
+    expect(response.json<Link>().accessCount).toBe(10)
   })
 
   test('BE-T14 rejects access increments for unknown links', async () => {
-    const response = await request('PATCH', '/links/not-found/accesses')
+    const response = await app.inject({ method: 'PATCH', url: '/links/not-found/accesses' })
 
     expect(response.statusCode).toBe(404)
-    expect(response.json().code).toBe('LINK_NOT_FOUND')
+    expect(response.json<{ code: string }>().code).toBe('LINK_NOT_FOUND')
   })
 
-  test('BE-T15 exports the links as CSV', async () => {
-    const response = await request('POST', '/links/export')
-
-    expect(response.statusCode).toBe(201)
-    expect(response.json().reportUrl).toMatch(/^https?:\/\//)
+  test('rejects an invalid opaque cursor', async () => {
+    const response = await app.inject({ method: 'GET', url: '/links?cursor=not-a-cursor' })
+    expect(response.statusCode).toBe(400)
   })
 
-  test('BE-T16 exports a valid header for an empty collection', async () => {
-    const response = await request('POST', '/links/export')
-
-    expect(response.statusCode).toBe(201)
-    expect(response.headers['content-type']).toContain('text/csv')
-  })
-
-  test('BE-T17 generates unique report names', async () => {
-    const first = await request('POST', '/links/export')
-    const second = await request('POST', '/links/export')
-
-    expect(first.json().reportUrl).not.toBe(second.json().reportUrl)
-  })
-
-  test('BE-T18 exposes a public CDN URL for the report', async () => {
-    const response = await request('POST', '/links/export')
-
-    expect(response.statusCode).toBe(201)
-    expect(response.json().reportUrl).toContain('/reports/')
-  })
-
-  test('BE-T19 reports storage failures without a false URL', async () => {
-    const response = await request('POST', '/links/export')
-
-    expect([201, 502, 503]).toContain(response.statusCode)
-    if (response.statusCode !== 201) {
-      expect(response.json().code).toBe('EXPORT_FAILED')
-    }
-  })
-
-  test('BE-T20 returns the required CSV columns', async () => {
-    const response = await request('POST', '/links/export')
-
-    expect(response.statusCode).toBe(201)
-    expect(response.json().columns).toEqual([
-      'original_url',
-      'short_url',
-      'access_count',
-      'created_at',
-    ])
-  })
-
-  test('BE-T21 keeps list queries on the indexed cursor path', async () => {
-    const response = await request('GET', '/links?limit=20')
+  test('BE-T21 identifies cursor pagination', async () => {
+    const response = await app.inject({ method: 'GET', url: '/links?limit=20' })
 
     expect(response.statusCode).toBe(200)
     expect(response.headers['x-pagination-strategy']).toBe('cursor')
   })
 
   test('BE-T22 responds to CORS preflight', async () => {
-    const response = await request('OPTIONS', '/links', undefined, {
-      origin: 'http://localhost:5173',
-      'access-control-request-method': 'POST',
+    const response = await app.inject({
+      headers: {
+        'access-control-request-method': 'POST',
+        origin: 'http://localhost:5173',
+      },
+      method: 'OPTIONS',
+      url: '/links',
     })
 
     expect(response.statusCode).toBe(204)

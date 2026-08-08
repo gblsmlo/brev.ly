@@ -111,7 +111,14 @@
 - Geradas e aplicadas migrations nos bancos de desenvolvimento e testes.
 - Implementado `createLinksRepository` com CRUD inicial, listagem keyset e incremento atômico.
 - Traduzida a violação PostgreSQL `23505` para conflito conhecido pelo use case.
-- Seis testes de integração aprovados, incluindo dez incrementos concorrentes.
+- Sete testes de integração aprovados, incluindo cursor inválido e dez incrementos concorrentes.
+
+### 2026-08-07 — Fluxo CRUD da API
+
+- Implementados use cases e handlers para consultar, listar, excluir e incrementar links.
+- Todas as entradas HTTP usam os contratos Zod e erros conhecidos retornam `400`, `404` ou `409`.
+- A listagem expõe cursor opaco, limite validado e header `x-pagination-strategy: cursor`.
+- BE-T01–BE-T14 e BE-T22 passaram; CSV/CDN e evidência `EXPLAIN ANALYZE` seguem pendentes.
 
 ### 2026-08-07
 

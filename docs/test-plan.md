@@ -33,20 +33,20 @@ usa PostgreSQL em `127.0.0.1:5433`; não usar o banco de desenvolvimento.
 
 | ID | Caso | Tipo | Resultado esperado | Estado |
 | --- | --- | --- | --- | --- |
-| BE-T01 | Criar link com URL e código válidos | API | `201` e representação completa | Planejado |
-| BE-T02 | Rejeitar código com espaços, barras, caracteres fora do padrão, vazio, curto ou longo | Contrato/API | `400` com `VALIDATION_ERROR`; nenhum registro criado | Planejado |
-| BE-T03 | Rejeitar URL original que não seja HTTP(S) | Contrato/API | `400` com `VALIDATION_ERROR` | Planejado |
-| BE-T04 | Criar dois links com o mesmo `shortCode` | Integração/API | `409` com `SHORT_CODE_ALREADY_EXISTS`; constraint única preservada | Planejado |
-| BE-T05 | Excluir link existente por `shortCode` | API/Integração | `204`; nova consulta retorna `404` | Planejado |
-| BE-T06 | Excluir código inexistente ou mal formatado | API | `404` ou `400`, respectivamente | Planejado |
-| BE-T07 | Resolver `shortCode` existente | API | `200` com URL original e metadados | Planejado |
-| BE-T08 | Resolver código inexistente | API | `404` com `LINK_NOT_FOUND` | Planejado |
-| BE-T09 | Listar coleção vazia | API | `200`, `items: []` e cursor nulo | Planejado |
-| BE-T10 | Listar coleção com cursor e limite | API/Integração | Ordem estável, limite respeitado e `nextCursor` correto | Planejado |
-| BE-T11 | Rejeitar limite zero, negativo, decimal ou acima do teto | Contrato/API | `400` sem consulta ilimitada | Planejado |
-| BE-T12 | Incrementar acessos de um link | API/Integração | Operação atômica e contador incrementado em `1` | Planejado |
-| BE-T13 | Incrementar acessos concorrentemente | Integração | N requisições resultam em exatamente N incrementos | Planejado |
-| BE-T14 | Incrementar código inexistente | API | `404` com `LINK_NOT_FOUND` | Planejado |
+| BE-T01 | Criar link com URL e código válidos | API | `201` e representação completa | Aprovado |
+| BE-T02 | Rejeitar código com espaços, barras, caracteres fora do padrão, vazio, curto ou longo | Contrato/API | `400` com `VALIDATION_ERROR`; nenhum registro criado | Aprovado |
+| BE-T03 | Rejeitar URL original que não seja HTTP(S) | Contrato/API | `400` com `VALIDATION_ERROR` | Aprovado |
+| BE-T04 | Criar dois links com o mesmo `shortCode` | Integração/API | `409` com `SHORT_CODE_ALREADY_EXISTS`; constraint única preservada | Aprovado |
+| BE-T05 | Excluir link existente por `shortCode` | API/Integração | `204`; nova consulta retorna `404` | Aprovado |
+| BE-T06 | Excluir código inexistente ou mal formatado | API | `404` ou `400`, respectivamente | Aprovado |
+| BE-T07 | Resolver `shortCode` existente | API | `200` com URL original e metadados | Aprovado |
+| BE-T08 | Resolver código inexistente | API | `404` com `LINK_NOT_FOUND` | Aprovado |
+| BE-T09 | Listar coleção vazia | API | `200`, `items: []` e cursor nulo | Aprovado |
+| BE-T10 | Listar coleção com cursor e limite | API/Integração | Ordem estável, limite respeitado e `nextCursor` correto | Aprovado |
+| BE-T11 | Rejeitar limite zero, negativo, decimal ou acima do teto | Contrato/API | `400` sem consulta ilimitada | Aprovado |
+| BE-T12 | Incrementar acessos de um link | API/Integração | Operação atômica e contador incrementado em `1` | Aprovado |
+| BE-T13 | Incrementar acessos concorrentemente | Integração | N requisições resultam em exatamente N incrementos | Aprovado |
+| BE-T14 | Incrementar código inexistente | API | `404` com `LINK_NOT_FOUND` | Aprovado |
 | BE-T15 | Exportar coleção em CSV | Unidade/API | `201`, content-type/colunas corretos e dados completos | Planejado |
 | BE-T16 | Exportar coleção vazia | Unidade/API | CSV válido com cabeçalho e zero linhas de dados | Planejado |
 | BE-T17 | Gerar dois relatórios | Unidade/Integração | Nomes diferentes, aleatórios e sem colisão | Planejado |
@@ -54,7 +54,7 @@ usa PostgreSQL em `127.0.0.1:5433`; não usar o banco de desenvolvimento.
 | BE-T19 | Falha do armazenamento durante exportação | Unidade/API | Erro controlado `EXPORT_FAILED`; sem URL falsa | Planejado |
 | BE-T20 | Confirmar colunas do CSV | Unidade | `original_url`, `short_url`, `access_count`, `created_at` | Planejado |
 | BE-T21 | Verificar paginação em tabela grande | Performance | Plano usa índice `(created_at, id)` e não depende de `OFFSET` | Planejado |
-| BE-T22 | Validar CORS preflight | API | Origem configurada recebe headers CORS; origem indevida é rejeitada | Planejado |
+| BE-T22 | Validar CORS preflight | API | Origem configurada recebe headers CORS; origem indevida é rejeitada | Aprovado |
 
 ## Front-end
 
@@ -95,3 +95,10 @@ especificação RED não significa que a funcionalidade foi aceita.
   execução no navegador fica pendente da implementação da SPA e da instalação do browser Chromium.
 - `bun run lint` e `bun run typecheck` passam. Nenhum caso RED deve ser interpretado como requisito
   concluído.
+
+## Execução GREEN parcial — 2026-08-07
+
+- BE-T01–BE-T14 e BE-T22 passaram nos testes HTTP com repository injetado.
+- Sete testes PostgreSQL validaram constraint única, cursor, exclusão e incremento concorrente.
+- BE-T15–BE-T20 permanecem RED até a implementação de CSV/CDN.
+- BE-T21 mantém pendente a evidência com `EXPLAIN ANALYZE` em tabela grande.

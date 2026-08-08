@@ -5,7 +5,11 @@ import { and, desc, eq, lt, or, sql } from 'drizzle-orm'
 import type { CreateLinkBody, Link } from '../contracts'
 import type { Database } from '../database/client'
 import { type LinkRecord, links } from '../database/schema'
-import { DuplicateShortCodeRepositoryError } from './errors'
+import {
+  DuplicateShortCodeRepositoryError,
+  InvalidLinksCursorRepositoryError,
+  LinkNotFoundRepositoryError,
+} from './errors'
 import type { LinksRepository } from './ports'
 
 interface CreateLinksRepositoryOptions {
@@ -50,10 +54,16 @@ function encodeCursor(record: LinkRecord): string {
 }
 
 function decodeCursor(cursor: string): LinksCursor {
-  const value = JSON.parse(Buffer.from(cursor, 'base64url').toString('utf8')) as LinksCursor
+  let value: LinksCursor
+
+  try {
+    value = JSON.parse(Buffer.from(cursor, 'base64url').toString('utf8')) as LinksCursor
+  } catch {
+    throw new InvalidLinksCursorRepositoryError()
+  }
 
   if (!value.createdAt || !value.id || Number.isNaN(new Date(value.createdAt).getTime())) {
-    throw new Error('Invalid links cursor')
+    throw new InvalidLinksCursorRepositoryError()
   }
 
   return value
@@ -115,7 +125,7 @@ export function createLinksRepository({
         })
 
       if (!record) {
-        throw new Error('Link not found')
+        throw new LinkNotFoundRepositoryError()
       }
 
       return record

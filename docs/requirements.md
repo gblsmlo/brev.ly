@@ -7,13 +7,13 @@ Este documento é a fonte de verdade do escopo obrigatório. Um item só pode mu
 
 | ID | Requisito | Estado | Evidência esperada |
 | --- | --- | --- | --- |
-| BE-01 | Criar um link | Não iniciado | Testes da rota e caso de uso |
-| BE-02 | Rejeitar encurtamento mal formatado | Não iniciado | Teste de validação 400 |
-| BE-03 | Rejeitar encurtamento já existente | Não iniciado | Restrição única e teste 409 |
-| BE-04 | Deletar por `shortCode` | Não iniciado | Testes 204 e 404 |
-| BE-05 | Obter URL original por `shortCode` | Não iniciado | Testes 200 e 404 |
-| BE-06 | Listar links de forma performática | Não iniciado | Paginação por cursor e índice |
-| BE-07 | Incrementar acessos por `shortCode` | Não iniciado | Atualização atômica e teste concorrente |
+| BE-01 | Criar um link | Concluído | Testes da rota e caso de uso |
+| BE-02 | Rejeitar encurtamento mal formatado | Concluído | Teste de validação 400 |
+| BE-03 | Rejeitar encurtamento já existente | Concluído | Restrição única e teste 409 |
+| BE-04 | Deletar por `shortCode` | Concluído | Testes 204 e 404 |
+| BE-05 | Obter URL original por `shortCode` | Concluído | Testes 200 e 404 |
+| BE-06 | Listar links de forma performática | Em andamento | Cursor e índice concluídos; `EXPLAIN ANALYZE` pendente |
+| BE-07 | Incrementar acessos por `shortCode` | Concluído | Atualização atômica e teste concorrente |
 | BE-08 | Exportar links em CSV | Não iniciado | Teste de conteúdo e cabeçalhos |
 | BE-09 | Disponibilizar CSV via CDN | Não iniciado | URL pública retornada pela API |
 | BE-10 | Gerar nome aleatório e único | Não iniciado | UUID no nome do objeto |
@@ -47,4 +47,3 @@ Este documento é a fonte de verdade do escopo obrigatório. Um item só pode mu
 | DL-02 | Pastas raiz `web` e `server` | Concluído | Árvore do repositório |
 | DL-03 | Código obrigatório preservado na branch principal | Em andamento | Histórico e revisão final |
 | DL-04 | Front-end, back-end e DevOps documentados | Em andamento | README e documentação final |
-
