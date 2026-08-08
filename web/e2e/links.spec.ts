@@ -138,6 +138,8 @@ test.describe('Brev.ly front-end RED journeys', () => {
   })
 
   test('FE-T07 resolves and redirects a known short code', async ({ page }) => {
+    let incrementRequests = 0
+
     await page.route('**/links/contract-first', async (route) => {
       await route.fulfill({
         body: JSON.stringify({ ...validLink, accessCount: 1 }),
@@ -145,6 +147,7 @@ test.describe('Brev.ly front-end RED journeys', () => {
       })
     })
     await page.route('**/links/contract-first/accesses', async (route) => {
+      incrementRequests += 1
       await route.fulfill({
         body: JSON.stringify({ accessCount: 2, originalUrl: validLink.originalUrl }),
         contentType: 'application/json',
@@ -153,6 +156,7 @@ test.describe('Brev.ly front-end RED journeys', () => {
     await page.goto('/contract-first')
 
     await expect(page).toHaveURL(validLink.originalUrl)
+    expect(incrementRequests).toBe(1)
   })
 
   test('FE-T08 shows not found for an unknown short code', async ({ page }) => {

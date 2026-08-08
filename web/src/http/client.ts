@@ -11,6 +11,16 @@ export class ApiRequestError extends Error {
   }
 }
 
+export function createRequestHeaders(init: RequestInit): Headers {
+  const headers = new Headers(init.headers)
+
+  if (init.body !== undefined && init.body !== null && !headers.has('content-type')) {
+    headers.set('content-type', 'application/json')
+  }
+
+  return headers
+}
+
 export async function request<T>(
   path: string,
   init: RequestInit,
@@ -18,7 +28,7 @@ export async function request<T>(
 ): Promise<T> {
   const response = await fetch(`${baseUrl}${path}`, {
     ...init,
-    headers: { 'content-type': 'application/json', ...init.headers },
+    headers: createRequestHeaders(init),
   })
 
   if (!response.ok) {

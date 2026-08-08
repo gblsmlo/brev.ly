@@ -40,6 +40,7 @@ export async function buildHttpApp({
   app.decorate('services', services)
 
   await app.register(cors, {
+    methods: ['GET', 'HEAD', 'POST', 'PATCH', 'DELETE', 'OPTIONS'],
     origin: corsOrigin,
   })
 

@@ -194,4 +194,21 @@ describe('links API contract', () => {
     expect(response.statusCode).toBe(204)
     expect(response.headers['access-control-allow-origin']).toBe('http://localhost:5173')
   })
+
+  test.each([
+    'PATCH',
+    'DELETE',
+  ])('BE-T22 allows the %s method in CORS preflight', async (method) => {
+    const response = await app.inject({
+      headers: {
+        'access-control-request-method': method,
+        origin: 'http://localhost:5173',
+      },
+      method: 'OPTIONS',
+      url: '/links/contract-first',
+    })
+
+    expect(response.statusCode).toBe(204)
+    expect(response.headers['access-control-allow-methods']).toContain(method)
+  })
 })
